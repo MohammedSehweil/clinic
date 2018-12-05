@@ -42,16 +42,13 @@ class DoctorRequest extends FormRequest
             $rules = [
                 'first_name' => ['required', 'max:191'],
                 'last_name' => ['required', 'max:191'],
-                'email' => ['required', 'email', 'max:191', 'unique:users,id,' . $this->doctor->id],
+                'email' => ['required', 'email', 'max:191', 'unique:users,email,' . $this->doctor->id],
             ];
 
             if (isCurrentUser($this->doctor->id)) {
                 $rules['password'] = [
                     'required',
                     'confirmed',
-                    new ChangePassword(),
-                    new PasswordExposed(),
-                    new UnusedPassword((int)$this->segment(4)),
                 ];
             }
 
