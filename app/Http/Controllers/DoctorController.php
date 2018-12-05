@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Auth\Role;
 
 use App\Http\Requests\Backend\Auth\Role\DoctorRequest;
 use App\Models\Auth\Doctor;
+use App\Models\Auth\Patient;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
@@ -25,9 +26,24 @@ class DoctorController extends Controller
     public function index(DoctorRequest $request)
     {
 
-        $doctors = Doctor::query()
-            ->orderBy('id', 'asc')
-            ->paginate(25);
+        if (isAdmin()) {
+            $doctors = Doctor::query()
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+
+        } else if (isDoctor() or isPatient()) {
+
+            $user = \Auth::user();
+            $clinicIds = $user->clinics()->pluck('clinic_user.clinic_id')->toArray();
+            $doctors = Doctor::query()
+                ->whereHas('clinics', function ($q) use ($clinicIds) {
+                    return $q->whereIn('clinic_user.clinic_id', $clinicIds);
+                })
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+        }
+
+
 
         return view('doctor.index', compact('doctors'));
 
@@ -63,7 +79,7 @@ class DoctorController extends Controller
         $doctor->clinics()->sync($clinics);
 
         return redirect()->route('admin.doctor.index')->withFlashSuccess('The doctor was successfully saved.');
-     }
+    }
 
     /**
      * @param ManageRoleRequest $request
@@ -82,17 +98,31 @@ class DoctorController extends Controller
     {
 
 
-        $doctor
-            ->update([
-                'first_name' => $request->get('first_name'),
-                'last_name' => $request->get('last_name'),
-                'password' => $request->get('password'),
-                'email' => $request->get('email'),
-                'phone' => $request->get('phone'),
-                'confirmation_code' => md5(uniqid(mt_rand(), true)),
-                'confirmed' => true,
-                'type' => 'doctor'
-            ]);
+        if (isCurrentUser($doctor->id)) {
+            $doctor
+                ->update([
+                    'first_name' => $request->get('first_name'),
+                    'last_name' => $request->get('last_name'),
+                    'password' => $request->get('password'),
+                    'email' => $request->get('email'),
+                    'phone' => $request->get('phone'),
+                    'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                    'confirmed' => true,
+                    'type' => 'doctor'
+                ]);
+
+        } else {
+            $doctor
+                ->update([
+                    'first_name' => $request->get('first_name'),
+                    'last_name' => $request->get('last_name'),
+                    'email' => $request->get('email'),
+                    'phone' => $request->get('phone'),
+                    'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                    'confirmed' => true,
+                    'type' => 'doctor'
+                ]);
+        }
 
         $clinics = array_values($request->get('clinics') ?? []);
         $doctor->clinics()->sync($clinics);
@@ -104,7 +134,10 @@ class DoctorController extends Controller
     public function destroy(DoctorRequest $request, Doctor $doctor)
     {
 
-        $doctor->delete();
+        try {
+            $doctor->delete();
+        } catch (\Exception $e) {
+        }
 
         return redirect()->route('admin.doctor.index')->withFlashSuccess('The doctor was successfully deleted.');
     }

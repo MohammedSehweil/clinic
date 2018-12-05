@@ -44,11 +44,20 @@ trait PatientAttribute
     public function getActionButtonsAttribute()
     {
 
+        if (isCurrentUser($this->id) or isAdmin()) {
+            $edit = $this->edit_button;
+            $delete = $this->delete_button;
+        } else {
+            $edit = '';
+            $delete = '';
+        }
+
+
         return '
-    	<div class="btn-group" role="group" aria-label="'.__('labels.backend.access.users.user_actions').'">
-		  '.$this->show_button.'
-		  '.$this->edit_button.'
-          '.$this->delete_button.'
+    	<div class="btn-group" role="group" aria-label="' . __('labels.backend.access.users.user_actions') . '">
+		  ' . $this->show_button . '
+		  ' . $edit . '
+          ' . $delete . '
 		
 		</div>';
     }

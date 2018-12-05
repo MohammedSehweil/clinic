@@ -7,6 +7,7 @@ use App\Models\Auth\Patient;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
+use App\Models\Auth\User;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
@@ -25,9 +26,28 @@ class PatientController extends Controller
     public function index(PatientRequest $request)
     {
 
-        $patients = Patient::query()
-            ->orderBy('id', 'asc')
-            ->paginate(25);
+        if (isAdmin()) {
+            $patients = Patient::query()
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+        } elseif (isDoctor()) {
+            $user = \Auth::user();
+            $clinicIds = $user->clinics()->pluck('clinic_user.clinic_id')->toArray();
+            $patients = Patient::query()
+                ->whereHas('clinics', function ($q) use ($clinicIds) {
+                    return $q->whereIn('clinic_user.clinic_id', $clinicIds);
+                })
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+        } elseif (isPatient()) {
+            $user = \Auth::user();
+
+            $patients = Patient::query()
+                ->where('id', '=', $user->id)
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+        }
+
 
         return view('patient.index', compact('patients'));
 
@@ -81,17 +101,32 @@ class PatientController extends Controller
     public function update(PatientRequest $request, Patient $patient)
     {
 
-        $patient
-            ->update([
-                'first_name' => $request->get('first_name'),
-                'last_name' => $request->get('last_name'),
-                'password' => $request->get('password'),
-                'email' => $request->get('email'),
-                'phone' => $request->get('phone'),
-                'confirmation_code' => md5(uniqid(mt_rand(), true)),
-                'confirmed' => true,
-                'type' => 'doctor'
-            ]);
+
+        if (isCurrentUser($patient->id)) {
+            $patient
+                ->update([
+                    'first_name' => $request->get('first_name'),
+                    'last_name' => $request->get('last_name'),
+                    'password' => $request->get('password'),
+                    'email' => $request->get('email'),
+                    'phone' => $request->get('phone'),
+                    'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                    'confirmed' => true,
+                    'type' => 'patient'
+                ]);
+
+        } else {
+            $patient
+                ->update([
+                    'first_name' => $request->get('first_name'),
+                    'last_name' => $request->get('last_name'),
+                    'email' => $request->get('email'),
+                    'phone' => $request->get('phone'),
+                    'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                    'confirmed' => true,
+                    'type' => 'patient'
+                ]);
+        }
 
         $clinics = array_values($request->get('clinics') ?? []);
         $patient->clinics()->sync($clinics);
@@ -100,6 +135,12 @@ class PatientController extends Controller
     }
 
 
+    /**
+     * @param PatientRequest $request
+     * @param Patient $patient
+     * @return mixed
+     * @throws \Exception
+     */
     public function destroy(PatientRequest $request, Patient $patient)
     {
 

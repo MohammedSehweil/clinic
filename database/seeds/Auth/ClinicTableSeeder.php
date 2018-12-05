@@ -27,18 +27,9 @@ class ClinicTableSeeder extends Seeder
             'name' => 'second clinic',
         ]);
 
-        $doctor = \App\Models\Auth\Doctor::create([
-            'first_name' => 'doctor ali',
-            'last_name' => 'kmal',
-            'email' => 'ali@gmail.com',
-            'password' => 'secret',
-            'confirmation_code' => md5(uniqid(mt_rand(), true)),
-            'confirmed' => true,
-            'type' => 'doctor'
-        ]);
+        $doctor = \App\Models\Auth\Doctor::find(2);
 
-
-        $doctor->clinics()->sync([$first->id , $second->id]);
+        $doctor->clinics()->sync([$first->id, $second->id]);
 //        $doctor->assignRole(config('access.users.admin_role'));
 
 

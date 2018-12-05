@@ -174,3 +174,50 @@ function badges($arr){
 
     return implode($result, ' ');
 }
+
+
+
+function isAdmin(){
+
+    $user = \Auth::user();
+    if(!$user){
+        return false;
+    }
+    return $user->type == 'admin';
+}
+
+
+
+
+function isDoctor(){
+
+    $user = \Auth::user();
+    if(!$user){
+        return false;
+    }
+    return $user->type == 'doctor';
+}
+
+
+
+
+
+function isPatient(){
+
+    $user = \Auth::user();
+    if(!$user){
+        return false;
+    }
+    return $user->type == 'patient';
+}
+
+
+
+function isCurrentUser($id){
+
+    $user = \Auth::user();
+    if(!$user){
+        return false;
+    }
+    return $user->id == $id;
+}

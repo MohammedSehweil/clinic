@@ -81,6 +81,11 @@ class User extends Authenticatable
         'confirmed' => 'boolean',
     ];
 
+    public function clinics()
+    {
+        return $this->belongsToMany(Clinic::class, 'clinic_user', 'user_id');
+    }
+
 
 //    protected static function boot()
 //    {

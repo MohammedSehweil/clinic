@@ -9,9 +9,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * Class PatientRequest.
+ * Class patientRequest.
  */
-class PatientRequest extends FormRequest
+class patientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -42,15 +42,18 @@ class PatientRequest extends FormRequest
             $rules = [
                 'first_name' => ['required', 'max:191'],
                 'last_name' => ['required', 'max:191'],
-                'email' => ['required', 'email', 'max:191', 'unique:users,id,'.$this->patient->id],
-                'password' => [
+                'email' => ['required', 'email', 'max:191', 'unique:users,id,' . $this->patient->id],
+            ];
+
+            if (isCurrentUser($this->patient->id)) {
+                $rules['password'] = [
                     'required',
                     'confirmed',
                     new ChangePassword(),
                     new PasswordExposed(),
                     new UnusedPassword((int)$this->segment(4)),
-                ]
-            ];
+                ];
+            }
 
         }
         return $rules;

@@ -68,32 +68,36 @@
                     </div>
 
 
-                    <div class="form-group row">
-                        {{ html()->label(__('validation.attributes.backend.access.users.password'))->class('col-md-2 form-control-label')->for('password') }}
+                    @if(isCurrentUser($patient->id))
 
-                        <div class="col-md-5">
-                            {{ html()->password('password')
-                                ->class('form-control')
-                                ->placeholder(__('validation.attributes.backend.access.users.password'))
-                                ->required()
-                                ->value('')
-                                }}
-                        </div><!--col-->
-                    </div><!--form-group-->
+                        <div class="form-group row">
+                            {{ html()->label(__('validation.attributes.backend.access.users.password'))->class('col-md-2 form-control-label')->for('password') }}
 
-                    <div class="form-group row">
-                        {{ html()->label(__('validation.attributes.backend.access.users.password_confirmation'))->class('col-md-2 form-control-label')->for('password_confirmation') }}
 
-                        <div class="col-md-5">
-                            {{ html()->password('password_confirmation')
-                                ->class('form-control')
-                                ->placeholder(__('validation.attributes.backend.access.users.password_confirmation'))
-                                ->required()
-                                ->value('')
-                                }}
-                        </div><!--col-->
-                    </div><!--form-group-->
+                            <div class="col-md-5">
+                                {{ html()->password('password')
+                                    ->class('form-control')
+                                    ->placeholder(__('validation.attributes.backend.access.users.password'))
+                                    ->required()
+                                    ->value('')
+                                    }}
+                            </div><!--col-->
+                        </div><!--form-group-->
 
+                        <div class="form-group row">
+                            {{ html()->label(__('validation.attributes.backend.access.users.password_confirmation'))->class('col-md-2 form-control-label')->for('password_confirmation') }}
+
+                            <div class="col-md-5">
+                                {{ html()->password('password_confirmation')
+                                    ->class('form-control')
+                                    ->placeholder(__('validation.attributes.backend.access.users.password_confirmation'))
+                                    ->required()
+                                    ->value('')
+                                    }}
+                            </div><!--col-->
+                        </div><!--form-group-->
+
+                    @endif
 
                     <div class="form-group row">
                         {{ html()->label('Phone Number')
