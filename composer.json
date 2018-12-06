@@ -70,6 +70,10 @@
             "@php artisan ide-helper:meta",
             "@php artisan package:discover --ansi"
         ],
+        "post-install-cmd": [
+            "php artisan clear-compiled",
+            "chmod -R 777 public/"
+        ],
         "clear-all": [
             "@php artisan clear-compiled",
             "@php artisan cache:clear",
