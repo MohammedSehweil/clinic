@@ -52,6 +52,5 @@ $app->singleton(
 |
 */
 
-$app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
 
 return $app;
