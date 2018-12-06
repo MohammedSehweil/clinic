@@ -9,9 +9,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * Class patientRequest.
+ * Class PatientRequest.
  */
-class patientRequest extends FormRequest
+class PatientRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
