@@ -35,6 +35,7 @@
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Clinic Name</th>
+                                <th>Specialties</th>
                                 <th>@lang('labels.general.actions')</th>
                             </tr>
                             </thead>
@@ -44,7 +45,8 @@
                                     <td>{{ ucwords($doctor->name) }}</td>
                                     <td>{!! $doctor->email !!}</td>
                                     <td>{!! $doctor->phone ?? '-' !!}</td>
-                                    <td>{!! badges($doctor->clinics()->pluck('name')->toArray())!!}</td>
+                                    <td>{!! badges(app(\App\Methods\DoctorMethods::class)->getDoctorClinics($doctor))!!}</td>
+                                    <td>{!! badges(app(\App\Methods\DoctorMethods::class)->getDoctorSpecialties($doctor))!!}</td>
                                     <td>{!! $doctor->action_buttons !!}</td>
                                 </tr>
                             @endforeach

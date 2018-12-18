@@ -32,7 +32,6 @@ class Doctor extends Authenticatable
         Uuid;
 
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -97,8 +96,10 @@ class Doctor extends Authenticatable
         });
     }
 
-    public function clinics()
+    public function clinic_specialties()
     {
-        return $this->belongsToMany(Clinic::class, 'clinic_user', 'user_id');
+        return $this->hasMany(UserClinicSpecialties::class, 'user_id');
     }
+
+
 }

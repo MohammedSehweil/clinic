@@ -26,7 +26,34 @@
                         <div class="col-md-10">
                             {{$clinic->name ?? '-'}}
                         </div><!--col-->
-                    </div><!--form-group-->
+                    </div>
+
+
+                    <div class="form-group row">
+                        {{ html()->label('Specialties')
+                            ->class('col-md-2 form-control-label')
+                        }}
+
+                        <div class="col-md-10">
+
+
+                            <ul>
+                                @foreach( $clinic->specialties()->get() as $key => $specialties)
+                                    <li>
+                                        {{$specialties->name}}
+                                        <ul>
+                                            @foreach( app(\App\Methods\DoctorMethods::class)->getSpecialtiesDoctors($specialties) as $doctor)
+                                                <li>{{$doctor}}</li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach
+                            </ul>
+
+
+                        </div><!--col-->
+                    </div>
+
 
                 </div><!--col-->
             </div><!--row-->

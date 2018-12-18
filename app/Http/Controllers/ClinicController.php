@@ -30,31 +30,35 @@ class ClinicController extends Controller
     public function index(ClinicRequest $request)
     {
 
+        $doctorsFilter = $request->get('doctors', []);
+        $clinicsFilter = $request->get('clinics', []);
+        $specialtiesFilter = $request->get('specialties', []);
+
+
         $user = \Auth::user();
-        if (isAdmin()) {
-            $clinics = Clinic::query()
-                ->orderBy('id', 'asc')
-                ->paginate(25);
-        } elseif (isDoctor()) {
-            $clinics = Clinic::query()
-                ->whereHas('doctors', function ($q) use ($user) {
-                    return $q->where('clinic_user.user_id', $user->id);
-                })
-                ->orderBy('id', 'asc')
-                ->paginate(25);
+        $clinics = Clinic::query()
+            ->when($clinicsFilter, function ($q) use ($clinicsFilter) {
+                return $q->whereIn('clinics.id', $clinicsFilter);
+            })
+            ->when($doctorsFilter, function ($q) use ($doctorsFilter) {
+                return $q->whereHas('specialties', function ($query) use ($doctorsFilter) {
+                    $query = $query->join('user_clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
+                        ->whereIn('user_clinic_specialties.user_id', $doctorsFilter);
+                    return $query;
+                });
+            })
+            ->when($specialtiesFilter, function ($q) use ($specialtiesFilter) {
+                return $q->whereHas('specialties', function ($query) use ($specialtiesFilter) {
+                    return $query->whereIn('specialties.id', $specialtiesFilter);
+                });
+            })
+            ->orderBy('id', 'asc')
+            ->paginate(25);
 
-        } elseif (isPatient()) {
 
-            $user = \Auth::user();
-
-            $clinicsIds = $user->clinics()->pluck('clinic_id')->toArray();
-
-            $clinics = Clinic::query()
-                ->whereIn('id', $clinicsIds)
-                ->orderBy('id', 'asc')
-                ->paginate(25);
+        if ($request->get('view', false)) {
+            return view('clinic.partial.table', compact('clinics'));
         }
-
         return view('clinic.index', compact('clinics'));
 
     }

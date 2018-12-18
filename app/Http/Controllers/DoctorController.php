@@ -26,24 +26,10 @@ class DoctorController extends Controller
     public function index(DoctorRequest $request)
     {
 
-        if (isAdmin()) {
-            $doctors = Doctor::query()
-                ->orderBy('id', 'asc')
-                ->paginate(25);
 
-        } else if (isDoctor() or isPatient()) {
-
-            $user = \Auth::user();
-            $clinicIds = $user->clinics()->pluck('clinic_user.clinic_id')->toArray();
-            $doctors = Doctor::query()
-                ->whereHas('clinics', function ($q) use ($clinicIds) {
-                    return $q->whereIn('clinic_user.clinic_id', $clinicIds);
-                })
-                ->orderBy('id', 'asc')
-                ->paginate(25);
-        }
-
-
+        $doctors = Doctor::query()
+            ->orderBy('id', 'asc')
+            ->paginate(25);
 
         return view('doctor.index', compact('doctors'));
 

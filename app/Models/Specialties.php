@@ -8,20 +8,21 @@ use App\Models\Traits\ClinicAttribute;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Role.
+ * Class Specialties.
  */
-class Clinic extends Model
+class Specialties extends Model
 {
 
     use ClinicAttribute;
-    protected $table = 'clinics';
+    protected $table = 'specialties';
     protected $guarded = ['id'];
 
 
-    public function specialties()
+    public function clinics()
     {
-        return $this->belongsToMany(Specialties::class, 'clinic_specialties', 'clinic_id');
+        return $this->belongsToMany(Clinic::class, 'clinic_specialties', 'specialties_id');
     }
+
 
 
 }
