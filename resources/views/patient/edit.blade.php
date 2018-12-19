@@ -114,28 +114,6 @@
                     </div>
 
 
-                    <div class="form-group row">
-                        {{ html()
-                            ->label('Clinics')
-                            ->class('col-md-2 form-control-label')
-                            ->for('click') }}
-
-                        <div class="col-md-5">
-
-                            @php
-                                $myClinics = $patient->clinics()->pluck('clinics.id')->toArray()
-                            @endphp
-
-                            @foreach(\App\Models\Auth\Clinic::all() as $clinic)
-                                {{$clinic->name}}
-                                {{
-                                html()->checkbox('clinics['. $clinic->id. ']', in_array($clinic->id, $myClinics), $clinic->id)
-                                    ->class('')
-                                }}
-                            @endforeach
-                        </div><!--col-->
-                    </div>
-
 
                     <!--form-group-->
 

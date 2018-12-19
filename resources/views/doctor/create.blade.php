@@ -107,23 +107,23 @@
                     </div>
 
 
-                    <div class="form-group row">
-                        {{ html()
-                            ->label('Clinics')
-                            ->class('col-md-2 form-control-label')
-                            ->for('click') }}
+                    {{--<div class="form-group row">--}}
+                        {{--{{ html()--}}
+                            {{--->label('Clinics')--}}
+                            {{--->class('col-md-2 form-control-label')--}}
+                            {{--->for('click') }}--}}
 
-                        <div class="col-md-5">
+                        {{--<div class="col-md-5">--}}
 
-                            @foreach(\App\Models\Auth\Clinic::all() as $clinic)
-                                {{$clinic->name}}
-                                {{
-                                html()->checkbox('clinics['. $clinic->id. ']', false, $clinic->id)
-                                    ->class('')
-                                }}
-                            @endforeach
-                        </div><!--col-->
-                    </div>
+                            {{--@foreach(\App\Models\Auth\Clinic::all() as $clinic)--}}
+                                {{--{{$clinic->name}}--}}
+                                {{--{{--}}
+                                {{--html()->checkbox('clinics['. $clinic->id. ']', false, $clinic->id)--}}
+                                    {{--->class('')--}}
+                                {{--}}--}}
+                            {{--@endforeach--}}
+                        {{--</div><!--col-->--}}
+                    {{--</div>--}}
 
 
                     <!--form-group-->
