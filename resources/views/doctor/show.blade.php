@@ -41,14 +41,27 @@
 
 
                     <div class="form-group row">
-                        {{ html()->label('clinics')
+                        {{ html()->label('Clinics')
                             ->class('col-md-2 form-control-label')
                             ->for('email') }}
 
                         <div class="col-md-10">
-                            {!! badges($doctor->clinics()->pluck('name')->toArray()) !!}
+                            {!! badges(app(\App\Methods\DoctorMethods::class)->getDoctorClinics($doctor)) !!}
                         </div><!--col-->
                     </div>
+
+
+                    <div class="form-group row">
+                        {{ html()->label('Specialties')
+                            ->class('col-md-2 form-control-label')
+                             }}
+
+                        <div class="col-md-10">
+                            {!! badges(app(\App\Methods\DoctorMethods::class)->getDoctorSpecialties($doctor), 'primary') !!}
+                        </div><!--col-->
+                    </div>
+
+
 
                 </div><!--col-->
 
