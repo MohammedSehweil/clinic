@@ -69,6 +69,7 @@
 
     <script type="application/javascript">
 
+
         $(document).ready(function () {
             $('.select2_class_doctor').select2({
                 placeholder: "Select Doctor",
@@ -82,7 +83,9 @@
                 placeholder: "Select Specialties",
             });
 
-            $('.load-table').load('{{route('admin.clinic.index')}}?view=true');
+            $('.load-table').load('{{route('admin.clinic.index')}}?view=true', function () {
+                intDeleteButton();
+            });
 
 
             $('body').on('click', '#search_btn', function (e) {
@@ -98,6 +101,7 @@
                     },
                     success: function (result) {
                         $('.load-table').html(result);
+                        intDeleteButton();
                     },
                     error: function (result) {
                     }
