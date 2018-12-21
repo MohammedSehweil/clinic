@@ -40,6 +40,22 @@ class ClinicTableSeeder extends Seeder
         ]);
 
 
+        foreach (range(4, 9, 1) as $i){
+            \App\Models\Auth\Clinic::create([
+                'name' => 'clinic #'.$i,
+                'approved' => false,
+                'owner_id' => 4
+
+            ]);
+
+
+            \App\Models\Auth\Specialties::query()->create([
+                'name' => 'Spec #'.$i,
+            ]);
+
+        }
+
+
         $firstSpecialties = \App\Models\Auth\Specialties::query()->create([
             'name' => 'طب الاسنان',
         ]);
@@ -61,6 +77,8 @@ class ClinicTableSeeder extends Seeder
             'name' => 'نفسي',
             'description' => 'هو الفرع أو التخصص الذي يهتم بالاضطرابات النفسية، ويقوم بتشخيصها وعلاجها أحياناً والوقاية منها، وهذه الاضطرابات قد تكون عقلية أو سلوكية، تنشأ نتيجة خطأ معين في عمل الدماغ، أو نتيجة التعرض إلى صدمة غير متوقعة.'
         ]);
+
+
 
 
         $first->specialties()->sync([
