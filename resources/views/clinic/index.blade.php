@@ -12,7 +12,7 @@
                     </h4>
                 </div><!--col-->
 
-                @if(isAdmin())
+                @if(isAdmin() or isOwner())
                     <div class="col-sm-7 pull-right">
                         <div class="btn-toolbar float-right" role="toolbar"
                              aria-label="@lang('labels.general.toolbar_btn_groups')">
@@ -54,6 +54,8 @@
                             <div>Specialties</div>
                             {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), null, ['id' => 'specialties','class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
                         </div>
+
+
                     </div>
 
                 </div>

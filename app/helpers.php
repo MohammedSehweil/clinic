@@ -189,6 +189,16 @@ function isAdmin()
     return $user->type == 'admin';
 }
 
+function isOwner()
+{
+
+    $user = \Auth::user();
+    if (!$user) {
+        return false;
+    }
+    return $user->type == 'owner';
+}
+
 
 function isDoctor()
 {
@@ -220,4 +230,11 @@ function isCurrentUser($id)
         return false;
     }
     return $user->id == $id;
+}
+
+
+
+
+function currentUser(){
+    return \Auth::user();
 }

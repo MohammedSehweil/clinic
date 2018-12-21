@@ -52,6 +52,12 @@ class ClinicController extends Controller
                     return $query->whereIn('specialties.id', $specialtiesFilter);
                 });
             })
+            ->when($user->type == 'owner', function ($q) use ($user) {
+                return $q->where('owner_id', $user->id);
+            })
+            ->when($user->type == 'patient', function ($q) use ($user) {
+                return $q->where('approved', 1);
+            })
             ->orderBy('id', 'asc')
             ->paginate(25);
 
@@ -81,10 +87,36 @@ class ClinicController extends Controller
 
     public function store(ClinicRequest $request)
     {
-        Clinic::query()
+        $clinic = Clinic::query()
             ->create([
-                'name' => $request->get('name')
+                'name' => $request->get('name'),
+                'owner_id' => currentUser()->id
             ]);
+
+        $specialties = $request->get('specialties', []);
+        $specialtiesIds = array_filter($specialties, 'is_numeric');
+        $specialtiesNames = [];
+
+
+        foreach ($specialties as $specialty) {
+            if (!is_numeric($specialty)) {
+                $specialtiesNames[] = $specialty;
+            }
+        }
+
+        $clinic->specialties()->sync($specialtiesIds);
+
+        $ids = [];
+        foreach ($specialtiesNames as $name) {
+            $object = \App\Models\Auth\Specialties::query()->create([
+                'name' => $name,
+            ]);
+
+            $ids[] = $object->id;
+        }
+
+
+        $clinic->specialties()->syncWithoutDetaching($ids);
 
 
         return redirect()->route('admin.clinic.index')->withFlashSuccess('The clinic was successfully saved.');
@@ -107,6 +139,33 @@ class ClinicController extends Controller
     {
 
         $clinic->update(['name' => $request->get('name')]);
+
+
+        $specialties = $request->get('specialties', []);
+        $specialtiesIds = array_filter($specialties, 'is_numeric');
+        $specialtiesNames = [];
+
+
+        foreach ($specialties as $specialty) {
+            if (!is_numeric($specialty)) {
+                $specialtiesNames[] = $specialty;
+            }
+        }
+
+        $clinic->specialties()->sync($specialtiesIds);
+
+        $ids = [];
+        foreach ($specialtiesNames as $name) {
+            $object = \App\Models\Auth\Specialties::query()->create([
+                'name' => $name,
+            ]);
+
+            $ids[] = $object->id;
+        }
+
+
+        $clinic->specialties()->syncWithoutDetaching($ids);
+
 
         return redirect()->route('admin.clinic.index')->withFlashSuccess('The clinic was successfully updated.');
     }

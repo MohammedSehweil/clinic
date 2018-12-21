@@ -46,6 +46,11 @@ class ClinicMethods
         return array_unique($specialties);
     }
 
+    public function getClinicSpecialties($clinic)
+    {
+        $clinic_specialties_ids = $clinic->specialties()->pluck('specialties_id')->toArray();
+        return $clinic_specialties_ids;
+    }
 
     private function getObject($clinic)
     {

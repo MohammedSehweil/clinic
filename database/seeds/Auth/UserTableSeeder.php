@@ -51,6 +51,18 @@ class UserTableSeeder extends Seeder
             'type' => 'patient'
         ]);
 
+
+        User::create([
+            'first_name' => 'Clinic',
+            'last_name' => 'Owner',
+            'email' => 'owner@gmail.com',
+            'password' => 'secret',
+            'confirmation_code' => md5(uniqid(mt_rand(), true)),
+            'confirmed' => true,
+            'type' => 'owner'
+        ]);
+
+
         $this->enableForeignKeys();
     }
 }

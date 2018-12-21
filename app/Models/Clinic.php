@@ -23,5 +23,10 @@ class Clinic extends Model
         return $this->belongsToMany(Specialties::class, 'clinic_specialties', 'clinic_id');
     }
 
+    public function scopeApproved($query)
+    {
+        return $query->wherer('approved', true);
+    }
+
 
 }

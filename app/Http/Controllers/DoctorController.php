@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Backend\Auth\Role;
 
 use App\Http\Requests\Backend\Auth\Role\DoctorRequest;
+use App\Models\Auth\Clinic;
+use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\Doctor;
 use App\Models\Auth\Patient;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
+use App\Models\Auth\UserClinicSpecialties;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
@@ -26,10 +29,27 @@ class DoctorController extends Controller
     public function index(DoctorRequest $request)
     {
 
+        if (isOwner()) {
+            $user = currentUser();
+            $doctorsIds = Clinic::query()
+                ->where('clinics.owner_id', $user->id)
+                ->join('clinic_specialties', 'clinics.id', '=', 'clinic_specialties.clinic_id')
+                ->join('user_clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
+                ->pluck('user_clinic_specialties.user_id')
+                ->toArray();
 
-        $doctors = Doctor::query()
-            ->orderBy('id', 'asc')
-            ->paginate(25);
+
+            $doctors = Doctor::query()
+                ->whereIn('id', $doctorsIds)
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+
+        } else {
+            $doctors = Doctor::query()
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+
+        }
 
         return view('doctor.index', compact('doctors'));
 
@@ -61,8 +81,24 @@ class DoctorController extends Controller
             ]);
 
 
-        $clinics = array_values($request->get('clinics') ?? []);
-        $doctor->clinics()->sync($clinics);
+        $clinicId = $request->get('clinics', null);
+        $specialtiesids = $request->get('specialties', []) ?? [];
+
+        if ($clinicId) {
+            $clinicSpecialtiesids = ClinicSpecialties::query()
+                ->where('clinic_id', $clinicId)
+                ->whereIn('specialties_id', $specialtiesids)
+                ->pluck('clinic_specialties.id')
+                ->toArray();
+
+            foreach ($clinicSpecialtiesids as $val) {
+                UserClinicSpecialties::query()
+                    ->create([
+                        'user_id' => $doctor->id,
+                        'clinic_specialties_id' => $val
+                    ]);
+            }
+        }
 
         return redirect()->route('admin.doctor.index')->withFlashSuccess('The doctor was successfully saved.');
     }
@@ -110,8 +146,25 @@ class DoctorController extends Controller
                 ]);
         }
 
-        $clinics = array_values($request->get('clinics') ?? []);
-        $doctor->clinics()->sync($clinics);
+        $clinicId = $request->get('clinics', null);
+        $specialtiesids = $request->get('specialties', []) ?? [];
+
+        if ($clinicId) {
+            $clinicSpecialtiesids = ClinicSpecialties::query()
+                ->where('clinic_id', $clinicId)
+                ->whereIn('specialties_id', $specialtiesids)
+                ->pluck('clinic_specialties.id')
+                ->toArray();
+
+            foreach ($clinicSpecialtiesids as $val) {
+                UserClinicSpecialties::query()
+                    ->updateOrCreate([
+                        'user_id' => $doctor->id,
+                        'clinic_specialties_id' => $val
+                    ], []);
+            }
+        }
+
 
         return redirect()->route('admin.doctor.index')->withFlashSuccess('The doctor was successfully updated.');
     }

@@ -70,8 +70,7 @@ class PatientController extends Controller
             ]);
 
 
-        $clinics = array_values($request->get('clinics') ?? []);
-        $patient->clinics()->sync($clinics);
+
 
         return redirect()->route('admin.patient.index')->withFlashSuccess('The patient was successfully saved.');
     }

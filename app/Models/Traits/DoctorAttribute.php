@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models\Traits;
+use App\Methods\GeneralMethods;
 
 /**
  * Trait DoctorAttribute.
@@ -44,7 +45,9 @@ trait DoctorAttribute
     {
 
 
-        if (isCurrentUser($this->id) or isAdmin()) {
+        $doctorIds = app(GeneralMethods::class)->getClinicOwnerDoctorsIds();
+
+        if (isCurrentUser($this->id) or isAdmin() or in_array($this->id, $doctorIds)) {
             $edit = $this->edit_button;
             $delete = $this->delete_button;
         } else {

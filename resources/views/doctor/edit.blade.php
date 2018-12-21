@@ -109,6 +109,26 @@
                     </div>
 
 
+                    <div class="form-group row">
+                        {{ html()->label('Choose Clinic')
+                            ->class('col-md-2 form-control-label')
+                            ->for('clinics') }}
+
+                        <div class="col-md-5">
+                            {!! Form::select('clinics', app(\App\Methods\GeneralMethods::class)->getCurrentUserClinics(),  array_keys(app(\App\Methods\DoctorMethods::class)->getDoctorClinics($doctor)), ['id' => 'clinics', 'class' => 'form-control select2_class_clinic']); !!}
+                        </div><!--col-->
+                    </div>
+
+
+                    <div class="form-group row">
+                        {{ html()->label('Choose Specialties')
+                            ->class('col-md-2 form-control-label')
+                            ->for('specialties') }}
+
+                        <div class="col-md-5">
+                            {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), array_keys(app(\App\Methods\DoctorMethods::class)->getDoctorSpecialties($doctor)), ['id' => 'specialties', 'class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
+                        </div><!--col-->
+                    </div>
 
 
                     <!--form-group-->
@@ -130,4 +150,17 @@
         </div><!--card-footer-->
     </div><!--card-->
     {{ html()->closeModelForm() }}
+
+
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $('.select2_class_specialties').select2({
+                placeholder: "Select Specialties",
+            });
+        });
+    </script>
+
+
+
 @endsection

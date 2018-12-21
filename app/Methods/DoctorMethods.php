@@ -18,7 +18,7 @@ class DoctorMethods
         $clinics = ClinicSpecialties::query()
             ->whereIn('clinic_specialties.id', $clinic_specialties_ids)
             ->join('clinics', 'clinics.id', '=', 'clinic_specialties.clinic_id')
-            ->pluck('clinics.name')
+            ->pluck('clinics.name', 'clinics.id')
             ->toArray();
 
         return array_unique($clinics);
@@ -32,7 +32,7 @@ class DoctorMethods
         $specialties = ClinicSpecialties::query()
             ->whereIn('clinic_specialties.id', $clinic_specialties_ids)
             ->join('specialties', 'specialties.id', '=', 'clinic_specialties.specialties_id')
-            ->pluck('specialties.name')
+            ->pluck('specialties.name', 'specialties.id')
             ->toArray();
 
         return array_unique($specialties);

@@ -34,7 +34,6 @@
                     </div>
 
 
-
                     <div class="form-group row">
                         {{ html()->label('Second Name')
                             ->class('col-md-2 form-control-label')
@@ -49,7 +48,6 @@
                                 ->autofocus() }}
                         </div><!--col-->
                     </div>
-
 
 
                     <div class="form-group row">
@@ -91,7 +89,6 @@
                     </div><!--form-group-->
 
 
-
                     <div class="form-group row">
                         {{ html()->label('Phone Number')
                             ->class('col-md-2 form-control-label')
@@ -107,23 +104,27 @@
                     </div>
 
 
-                    {{--<div class="form-group row">--}}
-                        {{--{{ html()--}}
-                            {{--->label('Clinics')--}}
-                            {{--->class('col-md-2 form-control-label')--}}
-                            {{--->for('click') }}--}}
+                    <div class="form-group row">
+                        {{ html()->label('Choose Clinic')
+                            ->class('col-md-2 form-control-label')
+                            ->for('clinics') }}
 
-                        {{--<div class="col-md-5">--}}
+                        <div class="col-md-5">
+                            {!! Form::select('clinics', app(\App\Methods\GeneralMethods::class)->getCurrentUserClinics(), null, ['id' => 'clinics', 'class' => 'form-control select2_class_clinic']); !!}
+                        </div><!--col-->
+                    </div>
 
-                            {{--@foreach(\App\Models\Auth\Clinic::all() as $clinic)--}}
-                                {{--{{$clinic->name}}--}}
-                                {{--{{--}}
-                                {{--html()->checkbox('clinics['. $clinic->id. ']', false, $clinic->id)--}}
-                                    {{--->class('')--}}
-                                {{--}}--}}
-                            {{--@endforeach--}}
-                        {{--</div><!--col-->--}}
-                    {{--</div>--}}
+
+                    <div class="form-group row">
+                        {{ html()->label('Choose Specialties')
+                            ->class('col-md-2 form-control-label')
+                            ->for('specialties') }}
+
+                        <div class="col-md-5">
+                            {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), null, ['id' => 'specialties', 'class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
+                        </div><!--col-->
+                    </div>
+
 
 
                     <!--form-group-->
@@ -145,4 +146,16 @@
         </div><!--card-footer-->
     </div><!--card-->
     {{ html()->form()->close() }}
+
+
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $('.select2_class_specialties').select2({
+                placeholder: "Select Specialties",
+            });
+        });
+    </script>
+
+
 @endsection

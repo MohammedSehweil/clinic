@@ -2,7 +2,7 @@
 
 
 @section('content')
-{{ html()->modelForm($clinic, 'PATCH', route('admin.clinic.update', $clinic))->class('form-horizontal')->open() }}
+    {{ html()->modelForm($clinic, 'PATCH', route('admin.clinic.update', $clinic))->class('form-horizontal')->open() }}
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -15,7 +15,7 @@
             </div><!--row-->
             <!--row-->
 
-            <hr />
+            <hr/>
 
             <div class="row mt-4">
                 <div class="col">
@@ -24,7 +24,7 @@
                             ->class('col-md-2 form-control-label')
                             ->for('name') }}
 
-                        <div class="col-md-10">
+                        <div class="col-md-4">
                             {{ html()->text('name')
                                 ->class('form-control')
                                 ->placeholder(__('validation.attributes.backend.access.roles.name'))
@@ -33,7 +33,20 @@
                         </div><!--col-->
                     </div><!--form-group-->
 
+                    <div class="form-group row">
+                        {{ html()->label('Add Specialties')
+                            ->class('col-md-2 form-control-label')
+                            ->for('specialties') }}
+
+                        <div class="col-md-4">
+                            {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), app(\App\Methods\ClinicMethods::class)->getClinicSpecialties($clinic), ['id' => 'specialties', 'class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
+                        </div><!--col-->
+                    </div>
+
+
                 </div><!--col-->
+
+
             </div><!--row-->
         </div><!--card-body-->
 
@@ -49,5 +62,19 @@
             </div><!--row-->
         </div><!--card-footer-->
     </div><!--card-->
-{{ html()->closeModelForm() }}
+    {{ html()->closeModelForm() }}
+
+
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $('.select2_class_specialties').select2({
+                placeholder: "Select Specialties",
+                tags: true
+            });
+        });
+    </script>
+
+
+
 @endsection

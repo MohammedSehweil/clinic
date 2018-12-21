@@ -20,6 +20,11 @@ class CreateClinicsTable extends Migration
             $table->increments('id');
 
             $table->string('name');
+            $table->boolean('approved')->default(false);
+            $table->unsignedInteger('owner_id')->index();
+
+
+            $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

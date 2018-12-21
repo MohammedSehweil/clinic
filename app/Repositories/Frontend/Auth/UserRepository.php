@@ -101,13 +101,14 @@ class UserRepository extends BaseRepository
                 'password'          => $data['password'],
                                     // If users require approval or needs to confirm email
                 'confirmed'         => config('access.users.requires_approval') || config('access.users.confirm_email') ? 0 : 1,
+                'type'              => 'owner',
             ]);
 
             if ($user) {
                 /*
                  * Add the default site role to the new user
                  */
-                $user->assignRole(config('access.users.default_role'));
+                $user->assignRole('administrator');
             }
 
             /*

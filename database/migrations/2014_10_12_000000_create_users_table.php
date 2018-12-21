@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
 
-            $table->enum('type', ['doctor', 'patient', 'admin'])->default('admin');
+            $table->enum('type', ['doctor', 'patient', 'admin', 'owner'])->default('admin');
             $table->string('phone')->nullable();
 
 

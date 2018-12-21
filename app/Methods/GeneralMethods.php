@@ -17,12 +17,11 @@ class GeneralMethods
         $doctors = Doctor::all();
 
         $map = [];
-        foreach ($doctors as $doctor){
+        foreach ($doctors as $doctor) {
             $map[$doctor->id] = $doctor->full_name;
         }
-       return $map;
+        return $map;
     }
-
 
 
     public function getAllClinics()
@@ -34,6 +33,35 @@ class GeneralMethods
     public function getAllSpecialties()
     {
         return Specialties::query()->pluck('name', 'id')->toArray();
+    }
+
+
+    public function getCurrentUserClinics()
+    {
+        $user = currentUser();
+        return Clinic::query()
+            ->when($user->type == 'owner', function ($query) use ($user) {
+                $query
+                    ->where('owner_id', $user->id);
+            })
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
+
+    public function getClinicOwnerDoctorsIds()
+    { // return doctor ids.
+
+        $user = currentUser();
+        if ($user->type != 'owner') {
+            return [];
+        }
+        return Clinic::query()
+            ->where('clinics.owner_id', $user->id)
+            ->join('clinic_specialties', 'clinics.id', '=', 'clinic_specialties.clinic_id')
+            ->join('user_clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
+            ->pluck('user_clinic_specialties.user_id')
+            ->toArray();
     }
 
 
