@@ -123,9 +123,7 @@
                     },
                     url: url,
                     success: function (result) {
-                        $('.load-table').load('{{route('admin.clinic.index')}}?view=true', function () {
-                            intDeleteButton();
-                        });
+                        $('#search_btn').click();
                     },
                     error: function (result) {
                     }
