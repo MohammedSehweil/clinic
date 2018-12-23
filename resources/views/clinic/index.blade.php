@@ -89,8 +89,9 @@
                 intDeleteButton();
             });
 
+            let body = $('body');
 
-            $('body').on('click', '#search_btn', function (e) {
+            body.on('click', '#search_btn', function (e) {
 
                 e.preventDefault();
                 $.ajax({
@@ -110,6 +111,28 @@
                 });
 
             });
+
+
+            body.on('click', '.change_status_button', function (e) {
+                e.preventDefault();
+                let url = $(this).attr('href');
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    url: url,
+                    success: function (result) {
+                        $('.load-table').load('{{route('admin.clinic.index')}}?view=true', function () {
+                            intDeleteButton();
+                        });
+                    },
+                    error: function (result) {
+                    }
+                });
+
+            });
+
         });
 
 

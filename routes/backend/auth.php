@@ -23,6 +23,8 @@ Route::post('clinic', [\App\Http\Controllers\Backend\Auth\Role\ClinicController:
 Route::group(['prefix' => 'clinic/{clinic}'], function () {
     Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'edit'])->name('clinic.edit');
     Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'show'])->name('clinic.show');
+    Route::post('approve', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'approve'])->name('clinic.approve');
+    Route::post('reject', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'reject'])->name('clinic.reject');
     Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'update'])->name('clinic.update');
     Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'destroy'])->name('clinic.destroy');
 });

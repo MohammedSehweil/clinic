@@ -178,4 +178,28 @@ class ClinicController extends Controller
 
         return redirect()->route('admin.clinic.index')->withFlashSuccess('The clinic was successfully deleted.');
     }
+
+
+    public function approve(Clinic $clinic)
+    {
+        if (!$clinic->approved) {
+            $clinic->approved = true;
+            $clinic->save();
+        }
+
+        return response()->json(['message' => 'The clinic was successfully approved.'], 200);
+    }
+
+
+    public function reject(Clinic $clinic)
+    {
+        if ($clinic->approved) {
+            $clinic->approved = false;
+            $clinic->save();
+        }
+
+        return response()->json(['message' => 'The clinic was successfully rejected.'], 200);
+    }
+
+
 }

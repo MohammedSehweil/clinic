@@ -40,16 +40,39 @@ trait ClinicAttribute
     /**
      * @return string
      */
+    public function getApproveButtonAttribute()
+    {
+        return '<a href="' . route('admin.clinic.approve', $this) . '" data-toggle="tooltip" data-placement="top" title="' . 'Approve' . '" class="btn btn-success change_status_button"><i class="fa fa-check"></i></a>';
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getRejectButtonAttribute()
+    {
+        return '<a href="' . route('admin.clinic.reject', $this) . '" data-toggle="tooltip" data-placement="top" title="' . 'Reject' . '" class="btn btn-warning change_status_button"><i class="fa fa-ban"></i></a>';
+    }
+
+
+    /**
+     * @return string
+     */
     public function getActionButtonsAttribute()
     {
+        $edit = '';
+        $delete = '';
+        $state = '';
 
         $user = \Auth::user();
         if (isAdmin() or $user->id == $this->owner_id) {
             $edit = $this->edit_button;
             $delete = $this->delete_button;
-        } else {
-            $edit = '';
-            $delete = '';
+            if (!$this->approved) {
+                $state = $this->approve_button;
+            } else {
+                $state = $this->reject_button;
+            }
         }
 
 
@@ -58,6 +81,7 @@ trait ClinicAttribute
 		  ' . $this->show_button . '
 		  ' . $edit . '
           ' . $delete . '
+          ' . $state . '
 		
 		</div>';
     }
