@@ -77,4 +77,16 @@
 
 
 
+
+
 @endsection
+
+
+
+@push('after-styles')
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+    </style>
+@endpush
