@@ -68,11 +68,14 @@ trait ClinicAttribute
         if (isAdmin() or $user->id == $this->owner_id) {
             $edit = $this->edit_button;
             $delete = $this->delete_button;
-            if (!$this->approved) {
-                $state = $this->approve_button;
-            } else {
-                $state = $this->reject_button;
+            if(isAdmin()){
+                if (!$this->approved) {
+                    $state = $this->approve_button;
+                } else {
+                    $state = $this->reject_button;
+                }
             }
+
         }
 
 
