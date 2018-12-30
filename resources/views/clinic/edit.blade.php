@@ -44,6 +44,46 @@
                     </div>
 
 
+
+                    <div class="form-group row">
+                        {{ html()->label('Choose Country')
+                            ->class('col-md-2 form-control-label')
+                            ->for('country_id') }}
+
+                        <div class="col-md-4">
+                            {!! Form::select('country_id', app(\App\Methods\GeneralMethods::class)->getAllCountries(), $clinic->country_id, ['id' => 'country_id', 'class' => 'form-control']); !!}
+                        </div><!--col-->
+                    </div>
+
+                    <div class="form-group row">
+                        {{ html()->label('City')
+                            ->class('col-md-2 form-control-label')
+                            ->for('city') }}
+
+                        <div class="col-md-4">
+                            {{ html()->text('city')
+                                ->class('form-control')
+                                ->placeholder('City')
+                                ->required()
+                                ->autofocus() }}
+                        </div><!--col-->
+                    </div>
+
+
+                    <div class="form-group row">
+                        {{ html()->label('Description')
+                            ->class('col-md-2 form-control-label')
+                            ->for('description') }}
+
+                        <div class="col-md-4">
+                            {{ html()->textarea('description')
+                                ->class('form-control')
+                                ->placeholder('Description')
+                                ->autofocus() }}
+                        </div>
+                    </div>
+
+
                 </div><!--col-->
 
 

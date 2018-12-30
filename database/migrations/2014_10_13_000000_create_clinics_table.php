@@ -22,9 +22,14 @@ class CreateClinicsTable extends Migration
             $table->string('name');
             $table->boolean('approved')->default(false);
             $table->unsignedInteger('owner_id')->index();
+            $table->unsignedInteger('country_id')->index();
+
+            $table->text('city')->nullable();
+            $table->longText('description')->nullable();
 
 
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

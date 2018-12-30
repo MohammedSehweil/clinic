@@ -55,7 +55,19 @@
                             {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), null, ['id' => 'specialties','class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
                         </div>
 
+                        <div class="col-md-3">
+                            <div>Countries</div>
+                            {!! Form::select('countries[]', app(\App\Methods\GeneralMethods::class)->getAllCountries(), null, ['id' => 'countries','class' => 'form-control select2_class_countries', 'multiple' => 'multiple']); !!}
+                        </div>
 
+                        <div class="col-md-3">
+                            <div>City</div>
+                            {!!  html()->text('city')
+                                ->id('city')
+                                ->class('form-control')
+                                ->placeholder('City')
+                                ->autofocus() !!}
+                        </div>
                     </div>
 
                 </div>
@@ -73,6 +85,7 @@
 
 
         $(document).ready(function () {
+
             $('.select2_class_doctor').select2({
                 placeholder: "Select Doctor",
             });
@@ -83,6 +96,10 @@
 
             $('.select2_class_specialties').select2({
                 placeholder: "Select Specialties",
+            });
+
+            $('.select2_class_countries').select2({
+                placeholder: "Select Countries",
             });
 
             $('.load-table').load('{{route('admin.clinic.index')}}?view=true', function () {
@@ -101,6 +118,8 @@
                         doctors: $("#doctors").val(),
                         clinics: $("#clinics").val(),
                         specialties: $("#specialties").val(),
+                        countries: $("#countries").val(),
+                        city: $("#city").val(),
                     },
                     success: function (result) {
                         $('.load-table').html(result);

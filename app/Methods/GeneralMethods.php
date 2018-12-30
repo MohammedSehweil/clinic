@@ -5,6 +5,7 @@ namespace App\Methods;
 
 use App\Models\Auth\Clinic;
 use App\Models\Auth\ClinicSpecialties;
+use App\Models\Auth\Country;
 use App\Models\Auth\Doctor;
 use App\Models\Auth\Specialties;
 use Illuminate\Database\Eloquent\Model;
@@ -64,5 +65,12 @@ class GeneralMethods
             ->toArray();
     }
 
+
+    public function getAllCountries()
+    {
+        return Country::query()
+            ->pluck('name', 'id')
+            ->toArray();
+    }
 
 }

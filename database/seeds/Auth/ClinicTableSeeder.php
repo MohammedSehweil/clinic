@@ -22,20 +22,28 @@ class ClinicTableSeeder extends Seeder
         $first = \App\Models\Auth\Clinic::create([
             'name' => 'first clinic',
             'approved' => true,
-            'owner_id' => 4
+            'owner_id' => 4,
+            'country_id' => 170,
+            'city' => 'Ramallah',
         ]);
 
         $second = \App\Models\Auth\Clinic::create([
             'name' => 'second clinic',
             'approved' => true,
-            'owner_id' => 4
+            'owner_id' => 4,
+            'country_id' => 170,
+            'city' => 'Nablus',
+
 
         ]);
 
         $third = \App\Models\Auth\Clinic::create([
             'name' => 'third clinic',
             'approved' => false,
-            'owner_id' => 4
+            'owner_id' => 4,
+            'country_id' => 170,
+            'city' => 'Nablus',
+
 
         ]);
 
@@ -44,7 +52,10 @@ class ClinicTableSeeder extends Seeder
             \App\Models\Auth\Clinic::create([
                 'name' => 'clinic #'.$i,
                 'approved' => false,
-                'owner_id' => 4
+                'owner_id' => 4,
+                'country_id' => 170,
+                'city' => 'Ramallah',
+
 
             ]);
 

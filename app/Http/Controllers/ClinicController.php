@@ -33,6 +33,8 @@ class ClinicController extends Controller
         $doctorsFilter = $request->get('doctors', []);
         $clinicsFilter = $request->get('clinics', []);
         $specialtiesFilter = $request->get('specialties', []);
+        $countriesFilter = $request->get('countries', []);
+        $cityFilter = $request->get('city', []);
 
 
         $user = \Auth::user();
@@ -52,11 +54,24 @@ class ClinicController extends Controller
                     return $query->whereIn('specialties.id', $specialtiesFilter);
                 });
             })
+            ->when($countriesFilter, function ($q) use ($countriesFilter) {
+                return $q->whereIn('clinics.country_id', $countriesFilter);
+            })
+            ->when($cityFilter, function ($q) use ($cityFilter) {
+                return $q->where('clinics.city', 'LIKE', "%$cityFilter%");
+            })
             ->when($user->type == 'owner', function ($q) use ($user) {
                 return $q->where('owner_id', $user->id);
             })
             ->when($user->type == 'patient', function ($q) use ($user) {
                 return $q->where('approved', 1);
+            })
+            ->when($user->type == 'doctor', function ($q) use ($user) {
+                return $q->whereHas('specialties', function ($query) {
+                    $query = $query->join('user_clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
+                        ->whereIn('user_clinic_specialties.user_id', [currentUser()->id]);
+                    return $query;
+                });
             })
             ->orderBy('id', 'asc')
             ->paginate(25);
@@ -90,7 +105,10 @@ class ClinicController extends Controller
         $clinic = Clinic::query()
             ->create([
                 'name' => $request->get('name'),
-                'owner_id' => currentUser()->id
+                'owner_id' => currentUser()->id,
+                'country_id' => $request->get('country_id'),
+                'city' => $request->get('city', null),
+                'description' => $request->get('description', null),
             ]);
 
         $specialties = $request->get('specialties', []);
@@ -138,7 +156,15 @@ class ClinicController extends Controller
     public function update(ClinicRequest $request, Clinic $clinic)
     {
 
-        $clinic->update(['name' => $request->get('name')]);
+        $clinic
+            ->update(
+                [
+                    'name' => $request->get('name'),
+                    'country_id' => $request->get('country_id'),
+                    'city' => $request->get('city', null),
+                    'description' => $request->get('description', null),
+                ]
+            );
 
 
         $specialties = $request->get('specialties', []);

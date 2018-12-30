@@ -7,6 +7,8 @@
                     <th>Name</th>
                     <th>Specialties</th>
                     <th>Doctors</th>
+                    <th>Country</th>
+                    <th>City</th>
                     <th>Approved</th>
                     <th>@lang('labels.general.actions')</th>
                 </tr>
@@ -17,6 +19,8 @@
                         <td>{{ ucwords($clinic->name) }}</td>
                         <td>{!! badges($clinic->specialties()->pluck('specialties.name')->toArray()) !!}</td>
                         <td>{!! badges(app(\App\Methods\ClinicMethods::class)->getClinicDoctors($clinic), 'primary')!!}</td>
+                        <td>{{ $clinic->country->name }}</td>
+                        <td>{{ $clinic->city }}</td>
                         <td>{!! $clinic->approved ? badges(['YES']): badges(['NO'], 'danger')!!}</td>
                         <td>{!! $clinic->action_buttons !!}</td>
                     </tr>

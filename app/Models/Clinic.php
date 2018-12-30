@@ -28,5 +28,9 @@ class Clinic extends Model
         return $query->wherer('approved', true);
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 
 }

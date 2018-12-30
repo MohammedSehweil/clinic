@@ -55,6 +55,41 @@
                     </div>
 
 
+                    <div class="form-group row">
+                        {{ html()->label('Country')
+                            ->class('col-md-2 form-control-label')
+                            ->for('country') }}
+
+                        <div class="col-md-10">
+                            {{optional($clinic->country)->name ?? '-'}}
+                        </div><!--col-->
+                    </div>
+
+
+                    <div class="form-group row">
+                        {{ html()->label('City')
+                            ->class('col-md-2 form-control-label')
+                            ->for('city') }}
+
+                        <div class="col-md-10">
+                            {{$clinic->city ?? '-'}}
+                        </div><!--col-->
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        {{ html()->label('Description')
+                            ->class('col-md-2 form-control-label')
+                            ->for('description') }}
+
+                        <div class="col-md-10">
+                            {{$clinic->description ?? '-'}}
+                        </div><!--col-->
+                    </div>
+
+
+
                 </div><!--col-->
             </div><!--row-->
         </div><!--card-body-->

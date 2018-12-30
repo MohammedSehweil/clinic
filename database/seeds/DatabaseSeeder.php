@@ -16,11 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->truncateMultiple([
-            'cache',
-            'jobs',
-            'sessions',
-        ]);
 
         $this->call(AuthTableSeeder::class);
 
