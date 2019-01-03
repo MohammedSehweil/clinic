@@ -32,8 +32,7 @@ return [
         /*
          * Whether or not the user has to confirm their email when signing up
          */
-//        'confirm_email' => env('CONFIRM_EMAIL', false),
-        'confirm_email' => false,
+        'confirm_email' => env('CONFIRM_EMAIL', false),
 
         /*
          * Whether or not the users email can be changed on the edit profile screen
