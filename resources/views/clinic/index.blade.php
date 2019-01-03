@@ -66,7 +66,7 @@
                                 ->id('city')
                                 ->class('form-control')
                                 ->placeholder('City')
-                                ->autofocus() !!}
+                                ->autofocus()  !!}
                         </div>
                     </div>
 
