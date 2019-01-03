@@ -82,7 +82,7 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                {{ html()->label(__('validation.attributes.frontend.password_confirmation'))->for('password_confirmation') }}
+                                {{ html()->label('Type')->for('password_confirmation') }}
 
                                 {!! Form::select('type', ['owner' => 'Owner', 'patient' => 'Patient'], null, ['id' => 'type', 'class' => 'form-control']); !!}
 
