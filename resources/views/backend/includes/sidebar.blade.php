@@ -15,57 +15,83 @@
                 @lang('menus.backend.sidebar.system')
             </li>
 
+            @if(canSeeClinics($logged_in_user))
+                <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/clinic*'), 'open') }}">
+                    <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/clinic*')) }}"
+                       href="#">
+                        <i class="nav-icon icon-user"></i> Clinic
 
-            <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/clinic*'), 'open') }}">
-                <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/clinic*')) }}"
-                   href="#">
-                    <i class="nav-icon icon-user"></i> Clinic
+                        @if ($pending_approval > 0)
+                            <span class="badge badge-danger">{{ $pending_approval }}</span>
+                        @endif
+                    </a>
 
-                    @if ($pending_approval > 0)
-                        <span class="badge badge-danger">{{ $pending_approval }}</span>
-                    @endif
-                </a>
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{ active_class(Active::checkUriPattern('admin/clinic/*')) }}"
+                               href="{{ route('admin.clinic.index') }}">
+                                Clinics
 
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item">
-                        <a class="nav-link {{ active_class(Active::checkUriPattern('admin/clinic/*')) }}"
-                           href="{{ route('admin.clinic.index') }}">
-                            Clinics
+                                @if ($pending_approval > 0)
+                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
-                            @if ($pending_approval > 0)
-                                <span class="badge badge-danger">{{ $pending_approval }}</span>
-                            @endif
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            @if(canSeeDoctors($logged_in_user))
+                <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/doctor*'), 'open') }}">
+                    <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/doctor*')) }}"
+                       href="#">
+                        <i class="nav-icon icon-user"></i> Doctors
 
+                        @if ($pending_approval > 0)
+                            <span class="badge badge-danger">{{ $pending_approval }}</span>
+                        @endif
+                    </a>
 
-            <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/doctor*'), 'open') }}">
-                <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/doctor*')) }}"
-                   href="#">
-                    <i class="nav-icon icon-user"></i> Doctors
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{ active_class(Active::checkUriPattern('admin/doctor/*')) }}"
+                               href="{{ route('admin.doctor.index') }}">
+                                Doctors
 
-                    @if ($pending_approval > 0)
-                        <span class="badge badge-danger">{{ $pending_approval }}</span>
-                    @endif
-                </a>
+                                @if ($pending_approval > 0)
+                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
-                <ul class="nav-dropdown-items">
-                    <li class="nav-item">
-                        <a class="nav-link {{ active_class(Active::checkUriPattern('admin/doctor/*')) }}"
-                           href="{{ route('admin.doctor.index') }}">
-                            Doctors
+            @if(canSeePrivateDoctors($logged_in_user))
+                <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/private-doctor*'), 'open') }}">
+                    <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/private-doctor*')) }}"
+                       href="#">
+                        <i class="nav-icon icon-user"></i> Private Doctors
 
-                            @if ($pending_approval > 0)
-                                <span class="badge badge-danger">{{ $pending_approval }}</span>
-                            @endif
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                        @if ($pending_approval > 0)
+                            <span class="badge badge-danger">{{ $pending_approval }}</span>
+                        @endif
+                    </a>
 
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{ active_class(Active::checkUriPattern('admin/private-doctor/*')) }}"
+                               href="{{ route('admin.private-doctor.index') }}">
+                                Private Doctors
 
+                                @if ($pending_approval > 0)
+                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
             <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/patient*'), 'open') }}">
                 <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/patient*')) }}"
                    href="#">
@@ -89,7 +115,6 @@
                     </li>
                 </ul>
             </li>
-
 
             @if ($logged_in_user->isAdmin() and isAdmin())
                 <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/auth*'), 'open') }}">

@@ -33,9 +33,19 @@ class CreateUsersTable extends Migration
             $table->timestamp('last_login_at')->nullable();
             $table->string('last_login_ip')->nullable();
 
-            $table->enum('type', ['doctor', 'patient', 'admin', 'owner'])->default('admin');
+            $table->enum('type', ['doctor', 'patient', 'admin', 'owner', 'private-doctor', 'lab_owner', 'ambulance', 'nurse'])->default('admin');
+
             $table->string('phone')->nullable();
 
+
+            $table->unsignedInteger('country_id')->index()->nullable();
+            $table->string('city')->nullable();
+            $table->string('description')->nullable();
+
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
+
+            $table->boolean('info_filled')->default(true);
+            $table->boolean('approved')->default(true);
 
             $table->rememberToken();
             $table->timestamps();

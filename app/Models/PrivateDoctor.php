@@ -2,6 +2,8 @@
 
 namespace App\Models\Auth;
 
+use App\Models\Traits\DoctorAttribute;
+use App\Models\Traits\PrivateDoctorAttribute;
 use App\Models\Traits\Uuid;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -16,19 +18,20 @@ use Illuminate\Database\Eloquent\Builder;
 
 
 /**
- * Class User.
+ * Class PrivateDoctor.
  */
-class User extends Authenticatable
+class PrivateDoctor extends Authenticatable
 {
     use HasRoles,
         Notifiable,
         SendUserPasswordReset,
         SoftDeletes,
-        UserAttribute,
+        PrivateDoctorAttribute,
         UserMethod,
         UserRelationship,
         UserScope,
         Uuid;
+
 
     /**
      * The attributes that are mass assignable.
@@ -58,6 +61,8 @@ class User extends Authenticatable
         'approved',
     ];
 
+    protected $table = 'users';
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -86,9 +91,19 @@ class User extends Authenticatable
         'confirmed' => 'boolean',
     ];
 
-    public function clinics()
+
+    protected static function boot()
     {
-        return $this->belongsToMany(Clinic::class, 'clinic_user', 'user_id');
+        parent::boot();
+
+        static::addGlobalScope('type', function (Builder $builder) {
+            $builder->where('type', '=', 'private-doctor');
+        });
+    }
+
+    public function clinic_specialties()
+    {
+        return $this->hasMany(UserClinicSpecialties::class, 'user_id');
     }
 
     public function specialties()
@@ -96,13 +111,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Specialties::class, 'user_specialties', 'user_id');
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 
-//    protected static function boot()
-//    {
-//        parent::boot();
-//
-//        static::addGlobalScope('type', function (Builder $builder) {
-//            $builder->where('type', '=', 'admin');
-//        });
-//    }
+
 }

@@ -13,54 +13,70 @@ use App\Http\Controllers\Backend\Auth\User\UserConfirmationController;
  * All route names are prefixed with 'admin.auth'.
  */
 
+Route::group(['middleware' => 'redirect_if_private'], function () {
+
+    Route::get('clinic', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'index'])->name('clinic.index');
+    Route::get('clinic/create', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'create'])->name('clinic.create');
+    Route::post('clinic', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'store'])->name('clinic.store');
+
+    Route::group(['prefix' => 'clinic/{clinic}'], function () {
+        Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'edit'])->name('clinic.edit');
+        Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'show'])->name('clinic.show');
+        Route::post('approve', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'approve'])->name('clinic.approve');
+        Route::post('reject', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'reject'])->name('clinic.reject');
+        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'update'])->name('clinic.update');
+        Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'destroy'])->name('clinic.destroy');
+    });
 
 
+    Route::get('doctor', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'index'])->name('doctor.index');
+    Route::get('doctor/create', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'create'])->name('doctor.create');
+    Route::post('doctor', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'store'])->name('doctor.store');
 
-Route::get('clinic', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'index'])->name('clinic.index');
-Route::get('clinic/create', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'create'])->name('clinic.create');
-Route::post('clinic', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'store'])->name('clinic.store');
+    Route::group(['prefix' => 'doctor/{doctor}'], function () {
+        Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'edit'])->name('doctor.edit');
+        Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'show'])->name('doctor.show');
+        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'update'])->name('doctor.update');
+        Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'destroy'])->name('doctor.destroy');
+    });
 
-Route::group(['prefix' => 'clinic/{clinic}'], function () {
-    Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'edit'])->name('clinic.edit');
-    Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'show'])->name('clinic.show');
-    Route::post('approve', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'approve'])->name('clinic.approve');
-    Route::post('reject', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'reject'])->name('clinic.reject');
-    Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'update'])->name('clinic.update');
-    Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\ClinicController::class, 'destroy'])->name('clinic.destroy');
+
+    Route::get('patient', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'index'])->name('patient.index');
+    Route::get('patient/create', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'create'])->name('patient.create');
+    Route::post('patient', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'store'])->name('patient.store');
+
+    Route::group(['prefix' => 'patient/{patient}'], function () {
+        Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'edit'])->name('patient.edit');
+        Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'show'])->name('patient.show');
+        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'update'])->name('patient.update');
+        Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'destroy'])->name('patient.destroy');
+    });
 });
 
 
+Route::get('private-doctor/create', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'create'])->name('private-doctor.create');
+Route::post('private-doctor', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'store'])->name('private-doctor.store');
 
-Route::get('doctor', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'index'])->name('doctor.index');
-Route::get('doctor/create', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'create'])->name('doctor.create');
-Route::post('doctor', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'store'])->name('doctor.store');
+Route::group(['middleware' => 'redirect_if_private'], function () {
+    Route::get('private-doctor', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'index'])->name('private-doctor.index');
 
-Route::group(['prefix' => 'doctor/{doctor}'], function () {
-    Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'edit'])->name('doctor.edit');
-    Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'show'])->name('doctor.show');
-    Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'update'])->name('doctor.update');
-    Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\DoctorController::class, 'destroy'])->name('doctor.destroy');
-});
+    Route::group(['prefix' => 'private-doctor/{privatedoctor}'], function () {
+        Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'edit'])->name('private-doctor.edit');
+        Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'show'])->name('private-doctor.show');
+        Route::post('approve', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'approve'])->name('private-doctor.approve');
+        Route::post('reject', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'reject'])->name('private-doctor.reject');
+        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'update'])->name('private-doctor-doctorc.update');
+        Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'destroy'])->name('private-doctor.destroy');
+    });
 
-
-
-Route::get('patient', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'index'])->name('patient.index');
-Route::get('patient/create', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'create'])->name('patient.create');
-Route::post('patient', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'store'])->name('patient.store');
-
-Route::group(['prefix' => 'patient/{patient}'], function () {
-    Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'edit'])->name('patient.edit');
-    Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'show'])->name('patient.show');
-    Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'update'])->name('patient.update');
-    Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\PatientController::class, 'destroy'])->name('patient.destroy');
 });
 
 
 Route::group([
-    'prefix'     => 'auth',
-    'as'         => 'auth.',
-    'namespace'  => 'Auth',
-    'middleware' => 'role:'.config('access.users.admin_role'),
+    'prefix' => 'auth',
+    'as' => 'auth.',
+    'namespace' => 'Auth',
+    'middleware' => 'role:' . config('access.users.admin_role'),
 ], function () {
     /*
      * User Management
@@ -133,9 +149,6 @@ Route::group([
             Route::delete('/', [RoleController::class, 'destroy'])->name('role.destroy');
         });
     });
-
-
-
 
 
 });

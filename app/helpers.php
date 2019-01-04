@@ -164,7 +164,7 @@ if (!function_exists('camelcase_to_word')) {
 }
 
 
-function badges($arr, $color='success')
+function badges($arr, $color = 'success')
 {
 
     if (!$arr) {
@@ -188,6 +188,18 @@ function isAdmin()
     }
     return $user->type == 'admin';
 }
+
+
+function isPrivateDoctor()
+{
+
+    $user = \Auth::user();
+    if (!$user) {
+        return false;
+    }
+    return $user->type == 'private-doctor';
+}
+
 
 function isOwner()
 {
@@ -233,8 +245,24 @@ function isCurrentUser($id)
 }
 
 
-
-
-function currentUser(){
+function currentUser()
+{
     return \Auth::user();
+}
+
+
+function canSeeClinics($user)
+{
+    return in_array($user->type, ['admin', 'owner', 'patient', 'doctor']);
+}
+
+function canSeeDoctors($user)
+{
+    return in_array($user->type, ['admin', 'owner', 'patient', 'doctor']);
+}
+
+
+function canSeePrivateDoctors($user)
+{
+    return in_array($user->type, ['admin','private-doctor', 'patient']);
 }

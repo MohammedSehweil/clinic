@@ -63,6 +63,18 @@ class UserTableSeeder extends Seeder
         ]);
 
 
+        User::create([
+            'first_name' => 'Private',
+            'last_name' => 'Doctor',
+            'email' => 'privatedoctor@gmail.com',
+            'password' => 'secret',
+            'confirmation_code' => md5(uniqid(mt_rand(), true)),
+            'confirmed' => true,
+            'type' => 'private-doctor',
+            'info_filled' => false
+        ]);
+
+
         $this->enableForeignKeys();
     }
 }
