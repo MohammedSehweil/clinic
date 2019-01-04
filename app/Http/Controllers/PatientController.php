@@ -61,7 +61,7 @@ class PatientController extends Controller
             ->create([
                 'first_name' => $request->get('first_name'),
                 'last_name' => $request->get('last_name'),
-                'password' => $request->get('password'),
+                'password' => bcrypt($request->get('password')),
                 'email' => $request->get('email'),
                 'phone' => $request->get('phone'),
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
@@ -69,7 +69,8 @@ class PatientController extends Controller
                 'type' => 'patient'
             ]);
 
-
+        $user = User::find($patient->id);
+        $user->assignRole('administrator');
 
 
         return redirect()->route('admin.patient.index')->withFlashSuccess('The patient was successfully saved.');

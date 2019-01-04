@@ -10,6 +10,7 @@ use App\Models\Auth\Patient;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
+use App\Models\Auth\User;
 use App\Models\Auth\UserClinicSpecialties;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\PermissionRepository;
@@ -72,7 +73,7 @@ class DoctorController extends Controller
             ->create([
                 'first_name' => $request->get('first_name'),
                 'last_name' => $request->get('last_name'),
-                'password' => $request->get('password'),
+                'password' => bcrypt($request->get('password')),
                 'email' => $request->get('email'),
                 'phone' => $request->get('phone'),
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
@@ -99,6 +100,9 @@ class DoctorController extends Controller
                     ]);
             }
         }
+
+        $user = User::find($doctor->id);
+        $user->assignRole('administrator');
 
         return redirect()->route('admin.doctor.index')->withFlashSuccess('The doctor was successfully saved.');
     }
