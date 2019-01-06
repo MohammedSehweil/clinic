@@ -65,8 +65,26 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
         Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'show'])->name('private-doctor.show');
         Route::post('approve', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'approve'])->name('private-doctor.approve');
         Route::post('reject', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'reject'])->name('private-doctor.reject');
-        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'update'])->name('private-doctor-doctorc.update');
+        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'update'])->name('private-doctor.update');
         Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'destroy'])->name('private-doctor.destroy');
+    });
+
+});
+
+
+Route::get('nurse/{nurse}/create', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'create'])->name('nurse.create');
+Route::post('nurse/{nurse}', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'store'])->name('nurse.store');
+
+Route::group(['middleware' => 'redirect_if_private'], function () {
+    Route::get('nurse', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'index'])->name('nurse.index');
+
+    Route::group(['prefix' => 'nurse/{nurse}'], function () {
+        Route::get('edit', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'edit'])->name('nurse.edit');
+        Route::get('show', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'show'])->name('nurse.show');
+        Route::post('approve', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'approve'])->name('nurse.approve');
+        Route::post('reject', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'reject'])->name('nurse.reject');
+        Route::patch('/', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'update'])->name('nurse.update');
+        Route::delete('/', [\App\Http\Controllers\Backend\Auth\Role\NurseController::class, 'destroy'])->name('nurse.destroy');
     });
 
 });

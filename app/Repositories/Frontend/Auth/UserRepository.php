@@ -102,7 +102,7 @@ class UserRepository extends BaseRepository
                                     // If users require approval or needs to confirm email
                 'confirmed'         => config('access.users.requires_approval') || config('access.users.confirm_email') ? 0 : 1,
                 'type'              => $data['type'],
-                'info_filled'       => !in_array($data['type'], ['private-doctor'])
+                'info_filled'       => !in_array($data['type'], ['private-doctor', 'nurse'])
             ]);
 
             if ($user) {

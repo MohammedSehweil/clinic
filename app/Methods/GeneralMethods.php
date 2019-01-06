@@ -7,6 +7,7 @@ use App\Models\Auth\Clinic;
 use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\Country;
 use App\Models\Auth\Doctor;
+use App\Models\Auth\Nurse;
 use App\Models\Auth\PrivateDoctor;
 use App\Models\Auth\Specialties;
 use Illuminate\Database\Eloquent\Model;
@@ -81,6 +82,18 @@ class GeneralMethods
         $map = [];
         foreach ($doctors as $doctor) {
             $map[$doctor->id] = $doctor->full_name;
+        }
+        return $map;
+    }
+
+
+    public function getAllNurses()
+    {
+        $nurses = Nurse::all();
+
+        $map = [];
+        foreach ($nurses as $nurse) {
+            $map[$nurse->id] = $nurse->full_name;
         }
         return $map;
     }

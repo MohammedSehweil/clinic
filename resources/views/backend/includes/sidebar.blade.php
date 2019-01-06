@@ -92,6 +92,36 @@
                     </ul>
                 </li>
             @endif
+
+
+
+            @if(canSeeNurses($logged_in_user))
+                <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/nurse*'), 'open') }}">
+                    <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/nurse*')) }}"
+                       href="#">
+                        <i class="nav-icon icon-user"></i> Nurses
+
+                        @if ($pending_approval > 0)
+                            <span class="badge badge-danger">{{ $pending_approval }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{ active_class(Active::checkUriPattern('admin/nurse/*')) }}"
+                               href="{{ route('admin.nurse.index') }}">
+                                Nurses
+
+                                @if ($pending_approval > 0)
+                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+
             <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/patient*'), 'open') }}">
                 <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/patient*')) }}"
                    href="#">

@@ -78,6 +78,22 @@ class UserTableSeeder extends Seeder
         ]);
 
 
+        User::create([
+            'first_name' => 'Nurse',
+            'last_name' => 'Nurse',
+            'email' => 'nurse@gmail.com',
+            'password' => 'secret',
+            'confirmation_code' => md5(uniqid(mt_rand(), true)),
+            'confirmed' => true,
+            'type' => 'nurse',
+            'info_filled' => false,
+            'country_id' => '2',
+            'city' => 'Nablus',
+            'description' => 'this is description .. ',
+        ]);
+
+
+
         $this->enableForeignKeys();
     }
 }

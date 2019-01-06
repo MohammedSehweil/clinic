@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Backend\Auth\Role;
 
 use App\Http\Requests\Backend\Auth\Role\ClinicRequest;
-use App\Http\Requests\Backend\Auth\Role\PrivateDoctorRequest;
+use App\Http\Requests\Backend\Auth\Role\NurseRequest;
 use App\Models\Auth\Clinic;
-use App\Models\Auth\PrivateDoctor;
+use App\Models\Auth\Nurse;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
@@ -18,19 +18,14 @@ use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
 use Illuminate\Http\Request;
 
 /**
- * Class PrivateDoctorController.
+ * Class NurseController.
  */
-class PrivateDoctorController extends Controller
+class NurseController extends Controller
 {
     public function __construct()
     {
     }
 
-    /**
-     * @param ManageRoleRequest $request
-     *
-     * @return mixed
-     */
     public function index(ClinicRequest $request)
     {
 
@@ -41,7 +36,7 @@ class PrivateDoctorController extends Controller
 
 
         $user = \Auth::user();
-        $privateDoctors = PrivateDoctor::query()
+        $nurses = Nurse::query()
             ->when($doctorsFilter, function ($q) use ($doctorsFilter) {
                 return $q->whereHas('specialties', function ($query) use ($doctorsFilter) {
                     $query = $query
@@ -63,7 +58,7 @@ class PrivateDoctorController extends Controller
             ->when($user->type == 'patient', function ($q) use ($user) {
                 return $q->where('users.approved', 1);
             })
-            ->when($user->type == 'private-doctor', function ($q) use ($user) {
+            ->when($user->type == 'nurse', function ($q) use ($user) {
                 return $q->where('users.id', $user->id);
             })
             ->orderBy('id', 'asc')
@@ -71,28 +66,28 @@ class PrivateDoctorController extends Controller
 
 
         if ($request->get('view', false)) {
-            return view('private-doctor.partial.table', compact('privateDoctors'));
+            return view('nurse.partial.table', compact('nurses'));
         }
-        return view('private-doctor.index', compact('privateDoctors'));
+        return view('nurse.index', compact('nurses'));
 
     }
 
-    public function create(Request $request, $privateDoctor)
+    public function create(Request $request, $nurse)
     {
-        $user = PrivateDoctor::find($privateDoctor);
-        return view('private-doctor.create', compact('user'));
+        $user = Nurse::find($nurse);
+        return view('nurse.create', compact('user'));
     }
 
 
-    public function show(ClinicRequest $request, Clinic $privateDoctor)
+    public function show(ClinicRequest $request, Clinic $nurse)
     {
-        return view('private-doctor.show', compact('private-doctor'));
+        return view('nurse.show', compact('nurse'));
     }
 
-    public function store(PrivateDoctorRequest $request, $privateDoctor)
+    public function store(NurseRequest $request, $nurse)
     {
 
-        $privateDoctor = PrivateDoctor::find($privateDoctor);
+        $nurse = Nurse::find($nurse);
 
         $specialties = $request->get('specialties', []);
         $specialtiesIds = array_filter($specialties, 'is_numeric');
@@ -114,7 +109,7 @@ class PrivateDoctorController extends Controller
             $specialtiesIds[] = $object->id;
         }
 
-        $privateDoctor
+        $nurse
             ->update([
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
@@ -123,10 +118,10 @@ class PrivateDoctorController extends Controller
             ]);
 
 
-        $privateDoctor->specialties()->sync($specialtiesIds);
+        $nurse->specialties()->sync($specialtiesIds);
 
 
-        return redirect()->route('admin.private-doctor.index')->withFlashSuccess('The private-doctor was successfully saved.');
+        return redirect()->route('admin.nurse.index')->withFlashSuccess('The nurse was successfully saved.');
     }
 
     /**
@@ -135,17 +130,17 @@ class PrivateDoctorController extends Controller
      *
      * @return mixed
      */
-    public function edit(ClinicRequest $request, Clinic $privateDoctor)
+    public function edit(ClinicRequest $request, Clinic $nurse)
     {
 
-        return view('private-doctor.edit', compact('private-doctor'));
+        return view('nurse.edit', compact('nurse'));
     }
 
 
-    public function update(ClinicRequest $request, PrivateDoctor $privateDoctor)
+    public function update(ClinicRequest $request, Nurse $nurse)
     {
 
-        $privateDoctor
+        $nurse
             ->update(
                 [
                     'name' => $request->get('name'),
@@ -167,7 +162,7 @@ class PrivateDoctorController extends Controller
             }
         }
 
-        $privateDoctor->specialties()->sync($specialtiesIds);
+        $nurse->specialties()->sync($specialtiesIds);
 
         $ids = [];
         foreach ($specialtiesNames as $name) {
@@ -179,42 +174,42 @@ class PrivateDoctorController extends Controller
         }
 
 
-        $privateDoctor->specialties()->syncWithoutDetaching($ids);
+        $nurse->specialties()->syncWithoutDetaching($ids);
 
 
-        return redirect()->route('admin.private-doctor.index')->withFlashSuccess('The private-doctor was successfully updated.');
+        return redirect()->route('admin.nurse.index')->withFlashSuccess('The nurse was successfully updated.');
     }
 
 
-    public function destroy(ClinicRequest $request, Clinic $privateDoctor)
+    public function destroy(ClinicRequest $request, Clinic $nurse)
     {
 
-        $privateDoctor->delete();
+        $nurse->delete();
 
-        return redirect()->route('admin.private-doctor.index')->withFlashSuccess('The private-doctor was successfully deleted.');
+        return redirect()->route('admin.nurse.index')->withFlashSuccess('The nurse was successfully deleted.');
     }
 
 
-    public function approve($privateDoctor)
+    public function approve($nurse)
     {
-        $privateDoctor = PrivateDoctor::find($privateDoctor);
-        if (!$privateDoctor->approved) {
-            $privateDoctor->update(['approved' => true]);
+        $nurse = Nurse::find($nurse);
+        if (!$nurse->approved) {
+            $nurse->update(['approved' => true]);
         }
 
-        return response()->json(['message' => 'The private-doctor was successfully approved.'], 200);
+        return response()->json(['message' => 'The nurse was successfully approved.'], 200);
     }
 
 
-    public function reject($privateDoctor)
+    public function reject($nurse)
     {
-        $privateDoctor = PrivateDoctor::find($privateDoctor);
+        $nurse = Nurse::find($nurse);
 
-        if ($privateDoctor->approved) {
-            $privateDoctor->update(['approved' => false]);
+        if ($nurse->approved) {
+            $nurse->update(['approved' => false]);
         }
 
-        return response()->json(['message' => 'The private-doctor was successfully rejected.'], 200);
+        return response()->json(['message' => 'The nurse was successfully rejected.'], 200);
     }
 
 

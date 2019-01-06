@@ -24,6 +24,11 @@ class RedirectIfPrivate
             return redirect()->route('admin.private-doctor.create', ['privatedoctor' => $user->id]);
         }
 
+        if ($user and in_array($user->type, ['nurse']) and !$user->info_filled) {
+            return redirect()->route('admin.nurse.create', ['nurse' => $user->id]);
+        }
+
+
         return $next($request);
     }
 }

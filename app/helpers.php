@@ -201,6 +201,16 @@ function isPrivateDoctor()
 }
 
 
+function isNurse()
+{
+
+    $user = \Auth::user();
+    if (!$user) {
+        return false;
+    }
+    return $user->type == 'nurse';
+}
+
 function isOwner()
 {
 
@@ -267,4 +277,11 @@ function canSeeDoctors($user)
 function canSeePrivateDoctors($user)
 {
     return in_array($user->type, ['admin','private-doctor', 'patient']);
+}
+
+
+
+function canSeeNurses($user)
+{
+    return in_array($user->type, ['admin','nurse', 'patient']);
 }
