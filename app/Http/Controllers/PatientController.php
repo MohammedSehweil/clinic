@@ -26,7 +26,7 @@ class PatientController extends Controller
     public function index(PatientRequest $request)
     {
 
-        if (isAdmin() or isDoctor()) {
+        if (true) {
             $patients = Patient::query()
                 ->orderBy('id', 'asc')
                 ->paginate(25);
