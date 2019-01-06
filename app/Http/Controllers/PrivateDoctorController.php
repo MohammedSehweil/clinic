@@ -77,9 +77,10 @@ class PrivateDoctorController extends Controller
 
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $privateDoctor)
     {
-        return view('private-doctor.create');
+        $user = PrivateDoctor::find($privateDoctor);
+        return view('private-doctor.create', compact('user'));
     }
 
 
@@ -88,9 +89,10 @@ class PrivateDoctorController extends Controller
         return view('private-doctor.show', compact('private-doctor'));
     }
 
-    public function store(PrivateDoctorRequest $request)
+    public function store(PrivateDoctorRequest $request, $privateDoctor)
     {
 
+        $privateDoctor = PrivateDoctor::find($privateDoctor);
 
         $specialties = $request->get('specialties', []);
         $specialtiesIds = array_filter($specialties, 'is_numeric');
@@ -112,8 +114,7 @@ class PrivateDoctorController extends Controller
             $specialtiesIds[] = $object->id;
         }
 
-        $user = currentUser();
-        $user
+        $privateDoctor
             ->update([
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
@@ -123,7 +124,7 @@ class PrivateDoctorController extends Controller
             ]);
 
 
-        $user->specialties()->sync($specialtiesIds);
+        $privateDoctor->specialties()->sync($specialtiesIds);
 
 
         return redirect()->route('admin.private-doctor.index')->withFlashSuccess('The private-doctor was successfully saved.');

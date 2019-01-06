@@ -245,6 +245,8 @@ function isCurrentUser($id)
 }
 
 
+
+
 function currentUser()
 {
     return \Auth::user();

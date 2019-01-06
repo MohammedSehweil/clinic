@@ -14,7 +14,7 @@ trait PrivateDoctorAttribute
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="' . route('admin.private-doctor.create') . '" class="btn btn-primary"><i class="fas fa-edit" data-toggle="tooltip" data-placement="top" title="' . __('buttons.general.crud.edit') . '"></i></a>';
+        return '<a href="' . route('admin.private-doctor.create', ['privatedoctor' => $this->id]) . '" class="btn btn-primary"><i class="fas fa-edit" data-toggle="tooltip" data-placement="top" title="' . __('buttons.general.crud.edit') . '"></i></a>';
     }
 
     /**

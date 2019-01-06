@@ -10,7 +10,7 @@
     @endif
 
 
-    {{ html()->form('POST', route('admin.private-doctor.store'))->class('form-horizontal')->open() }}
+    {{ html()->form('POST', route('admin.private-doctor.store', ['privatedoctor' => $user]))->class('form-horizontal')->open() }}
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -34,7 +34,7 @@
                             ->for('specialties') }}
 
                         <div class="col-md-4">
-                            {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), app(\App\Methods\PrivateDoctorMethods::class)->getPrivateDoctorSpecialties($logged_in_user), ['id' => 'specialties', 'class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
+                            {!! Form::select('specialties[]', app(\App\Methods\GeneralMethods::class)->getAllSpecialties(), app(\App\Methods\PrivateDoctorMethods::class)->getPrivateDoctorSpecialties($user), ['id' => 'specialties', 'class' => 'form-control select2_class_specialties', 'multiple' => 'multiple']); !!}
                         </div>
                     </div>
 
@@ -45,7 +45,7 @@
                             ->for('country_id') }}
 
                         <div class="col-md-4">
-                            {!! Form::select('country_id', app(\App\Methods\GeneralMethods::class)->getAllCountries(), $logged_in_user->country_id, ['id' => 'country_id', 'class' => 'form-control']); !!}
+                            {!! Form::select('country_id', app(\App\Methods\GeneralMethods::class)->getAllCountries(), $user->country_id, ['id' => 'country_id', 'class' => 'form-control']); !!}
                         </div><!--col-->
                     </div>
 
@@ -58,7 +58,7 @@
                             {{ html()->text('city')
                                 ->class('form-control')
                                 ->placeholder('City')
-                                ->value($logged_in_user->city)
+                                ->value($user->city)
                                 ->required()
                                 ->autofocus() }}
                         </div><!--col-->
@@ -74,7 +74,7 @@
                             {{ html()->textarea('description')
                                 ->class('form-control')
                                 ->placeholder('Description')
-                                ->value($logged_in_user->description)
+                                ->value($user->description)
                                 ->required()
                                 ->autofocus() }}
                         </div>

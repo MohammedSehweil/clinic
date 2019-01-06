@@ -54,8 +54,8 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
 });
 
 
-Route::get('private-doctor/create', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'create'])->name('private-doctor.create');
-Route::post('private-doctor', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'store'])->name('private-doctor.store');
+Route::get('private-doctor/{privatedoctor}/create', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'create'])->name('private-doctor.create');
+Route::post('private-doctor/{privatedoctor}', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'store'])->name('private-doctor.store');
 
 Route::group(['middleware' => 'redirect_if_private'], function () {
     Route::get('private-doctor', [\App\Http\Controllers\Backend\Auth\Role\PrivateDoctorController::class, 'index'])->name('private-doctor.index');

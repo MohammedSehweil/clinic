@@ -21,7 +21,7 @@ class RedirectIfPrivate
     {
         $user = currentUser();
         if ($user and in_array($user->type, ['private-doctor']) and !$user->info_filled) {
-            return redirect()->route('admin.private-doctor.create');
+            return redirect()->route('admin.private-doctor.create', ['privatedoctor' => $user->id]);
         }
 
         return $next($request);

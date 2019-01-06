@@ -71,7 +71,10 @@ class UserTableSeeder extends Seeder
             'confirmation_code' => md5(uniqid(mt_rand(), true)),
             'confirmed' => true,
             'type' => 'private-doctor',
-            'info_filled' => false
+            'info_filled' => false,
+            'country_id' => '1',
+            'city' => 'Ramallah',
+            'description' => 'this is description',
         ]);
 
 
