@@ -48,14 +48,15 @@ class DoctorController extends Controller
         } else if (isDoctor()) {
 
             $user = currentUser();
-            $clinicSpecialtiesIds = UserClinicSpecialties::query()
+            $clinicsIds = UserClinicSpecialties::query()
                 ->join('clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
                 ->where('user_clinic_specialties.user_id', $user->id)
-                ->pluck('clinic_specialties.id')
+                ->pluck('clinic_specialties.clinic_id')
                 ->toArray();
 
             $doctorsIds = UserClinicSpecialties::query()
-                ->whereIn('user_clinic_specialties.clinic_specialties_id', $clinicSpecialtiesIds)
+                ->join('clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
+                ->whereIn('clinic_specialties.clinic_id', $clinicsIds)
                 ->pluck('user_id')
                 ->toArray();
 
