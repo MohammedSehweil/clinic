@@ -45,6 +45,25 @@ class DoctorController extends Controller
                 ->orderBy('id', 'asc')
                 ->paginate(25);
 
+        } else if (isDoctor()) {
+
+            $user = currentUser();
+            $clinicSpecialtiesIds = UserClinicSpecialties::query()
+                ->join('clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
+                ->where('user_clinic_specialties.user_id', $user->id)
+                ->pluck('clinic_specialties.id')
+                ->toArray();
+
+            $doctorsIds = UserClinicSpecialties::query()
+                ->whereIn('user_clinic_specialties.clinic_specialties_id', $clinicSpecialtiesIds)
+                ->pluck('user_id')
+                ->toArray();
+
+            $doctors = Doctor::query()
+                ->whereIn('id', $doctorsIds)
+                ->orderBy('id', 'asc')
+                ->paginate(25);
+
         } else {
             $doctors = Doctor::query()
                 ->orderBy('id', 'asc')
