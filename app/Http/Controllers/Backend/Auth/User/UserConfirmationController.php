@@ -59,7 +59,7 @@ class UserConfirmationController extends Controller
     {
         $this->userRepository->confirm($user);
 
-        return redirect()->route('admin.auth.user.index')->withFlashSuccess(__('alerts.backend.users.confirmed'));
+        return redirect()->route('user.index')->withFlashSuccess(__('alerts.backend.users.confirmed'));
     }
 
     /**
@@ -73,6 +73,6 @@ class UserConfirmationController extends Controller
     {
         $this->userRepository->unconfirm($user);
 
-        return redirect()->route('admin.auth.user.index')->withFlashSuccess(__('alerts.backend.users.unconfirmed'));
+        return redirect()->route('user.index')->withFlashSuccess(__('alerts.backend.users.unconfirmed'));
     }
 }

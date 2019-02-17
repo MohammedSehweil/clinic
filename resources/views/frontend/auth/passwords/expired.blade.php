@@ -13,7 +13,7 @@
                 </div><!--card-header-->
 
                 <div class="card-body">
-                    {{ html()->form('PATCH', route('frontend.auth.password.expired.update'))->class('form-horizontal')->open() }}
+                    {{ html()->form('PATCH', route('password.expired.update'))->class('form-horizontal')->open() }}
 
                         <div class="row">
                             <div class="col">

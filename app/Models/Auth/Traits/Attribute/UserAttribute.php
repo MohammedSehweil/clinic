@@ -15,8 +15,7 @@ trait UserAttribute
     public function setPasswordAttribute($password) : void
     {
         // If password was accidentally passed in already hashed, try not to double hash it
-        if (
-            (\strlen($password) === 60 && preg_match('/^\$2y\$/', $password)) ||
+        if ((\strlen($password) === 60 && preg_match('/^\$2y\$/', $password)) ||
             (\strlen($password) === 95 && preg_match('/^\$argon2i\$/', $password))
         ) {
             $hash = $password;
@@ -48,15 +47,15 @@ trait UserAttribute
         if ($this->isConfirmed()) {
             if ($this->id != 1 && $this->id != auth()->id()) {
                 return '<a href="'.route(
-                    'admin.auth.user.unconfirm',
-                        $this
+                    'admin.user.unconfirm',
+                    $this
                 ).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.unconfirm').'" name="confirm_item"><span class="badge badge-success" style="cursor:pointer">'.__('labels.general.yes').'</span></a>';
             } else {
                 return '<span class="badge badge-success">'.__('labels.general.yes').'</span>';
             }
         }
 
-        return '<a href="'.route('admin.auth.user.confirm', $this).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.confirm').'" name="confirm_item"><span class="badge badge-danger" style="cursor:pointer">'.__('labels.general.no').'</span></a>';
+        return '<a href="'.route('admin.user.confirm', $this).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.confirm').'" name="confirm_item"><span class="badge badge-danger" style="cursor:pointer">'.__('labels.general.no').'</span></a>';
     }
 
     /**
@@ -126,8 +125,8 @@ trait UserAttribute
 
         foreach ($this->providers as $social) {
             $accounts[] = '<a href="'.route(
-                'admin.auth.user.social.unlink',
-                    [$this, $social]
+                'admin.user.social.unlink',
+                [$this, $social]
             ).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.unlink').'" data-method="delete"><i class="fab fa-'.$social->provider.'"></i></a>';
         }
 
@@ -146,8 +145,8 @@ trait UserAttribute
             //Won't break, but don't let them "Login As" themselves
             if ($this->id != auth()->id()) {
                 return '<a href="'.route(
-                    'admin.auth.user.login-as',
-                        $this
+                    'admin.user.login-as',
+                    $this
                 ).'" class="dropdown-item">'.__('buttons.backend.access.users.login_as', ['user' => e($this->full_name)]).'</a> ';
             }
         }
@@ -161,7 +160,7 @@ trait UserAttribute
     public function getClearSessionButtonAttribute()
     {
         if ($this->id != auth()->id() && config('session.driver') == 'database') {
-            return '<a href="'.route('admin.auth.user.clear-session', $this).'"
+            return '<a href="'.route('admin.user.clear-session', $this).'"
 			 	 data-trans-button-cancel="'.__('buttons.general.cancel').'"
                  data-trans-button-confirm="'.__('buttons.general.continue').'"
                  data-trans-title="'.__('strings.backend.general.are_you_sure').'"
@@ -176,7 +175,7 @@ trait UserAttribute
      */
     public function getShowButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.show', $this).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+        return '<a href="'.route('admin.user.show', $this).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.view').'" class="btn btn-info"><i class="fas fa-eye"></i></a>';
     }
 
     /**
@@ -184,7 +183,7 @@ trait UserAttribute
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.edit', $this).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
+        return '<a href="'.route('admin.user.edit', $this).'" data-toggle="tooltip" data-placement="top" title="'.__('buttons.general.crud.edit').'" class="btn btn-primary"><i class="fas fa-edit"></i></a>';
     }
 
     /**
@@ -192,7 +191,7 @@ trait UserAttribute
      */
     public function getChangePasswordButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.change-password', $this).'" class="dropdown-item">'.__('buttons.backend.access.users.change_password').'</a> ';
+        return '<a href="'.route('admin.user.change-password', $this).'" class="dropdown-item">'.__('buttons.backend.access.users.change_password').'</a> ';
     }
 
     /**
@@ -203,13 +202,13 @@ trait UserAttribute
         if ($this->id != auth()->id()) {
             switch ($this->active) {
                 case 0:
-                    return '<a href="'.route('admin.auth.user.mark', [
+                    return '<a href="'.route('admin.user.mark', [
                             $this,
                             1,
                         ]).'" class="dropdown-item">'.__('buttons.backend.access.users.activate').'</a> ';
 
                 case 1:
-                    return '<a href="'.route('admin.auth.user.mark', [
+                    return '<a href="'.route('admin.user.mark', [
                             $this,
                             0,
                         ]).'" class="dropdown-item">'.__('buttons.backend.access.users.deactivate').'</a> ';
@@ -228,7 +227,7 @@ trait UserAttribute
     public function getConfirmedButtonAttribute()
     {
         if (! $this->isConfirmed() && ! config('access.users.requires_approval')) {
-            return '<a href="'.route('admin.auth.user.account.confirm.resend', $this).'" class="dropdown-item">'.__('buttons.backend.access.users.resend_email').'</a> ';
+            return '<a href="'.route('admin.user.account.confirm.resend', $this).'" class="dropdown-item">'.__('buttons.backend.access.users.resend_email').'</a> ';
         }
 
         return '';
@@ -240,7 +239,7 @@ trait UserAttribute
     public function getDeleteButtonAttribute()
     {
         if ($this->id != auth()->id() && $this->id != 1) {
-            return '<a href="'.route('admin.auth.user.destroy', $this).'"
+            return '<a href="'.route('admin.user.destroy', $this).'"
                  data-method="delete"
                  data-trans-button-cancel="'.__('buttons.general.cancel').'"
                  data-trans-button-confirm="'.__('buttons.general.crud.delete').'"
@@ -256,7 +255,7 @@ trait UserAttribute
      */
     public function getDeletePermanentlyButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.delete-permanently', $this).'" name="confirm_item" class="btn btn-danger"><i class="fas fa-trash" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.delete_permanently').'"></i></a> ';
+        return '<a href="'.route('admin.user.delete-permanently', $this).'" name="confirm_item" class="btn btn-danger"><i class="fas fa-trash" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.delete_permanently').'"></i></a> ';
     }
 
     /**
@@ -264,7 +263,7 @@ trait UserAttribute
      */
     public function getRestoreButtonAttribute()
     {
-        return '<a href="'.route('admin.auth.user.restore', $this).'" name="confirm_item" class="btn btn-info"><i class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.restore_user').'"></i></a> ';
+        return '<a href="'.route('admin.user.restore', $this).'" name="confirm_item" class="btn btn-info"><i class="fas fa-sync" data-toggle="tooltip" data-placement="top" title="'.__('buttons.backend.access.users.restore_user').'"></i></a> ';
     }
 
     /**

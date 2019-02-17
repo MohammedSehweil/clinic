@@ -166,7 +166,6 @@ if (!function_exists('camelcase_to_word')) {
 
 function badges($arr, $color = 'success')
 {
-
     if (!$arr) {
         return '-';
     }
@@ -181,7 +180,6 @@ function badges($arr, $color = 'success')
 
 function isAdmin()
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -192,7 +190,6 @@ function isAdmin()
 
 function isPrivateDoctor()
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -203,7 +200,6 @@ function isPrivateDoctor()
 
 function isNurse()
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -213,7 +209,6 @@ function isNurse()
 
 function isOwner()
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -224,7 +219,6 @@ function isOwner()
 
 function isDoctor()
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -235,7 +229,6 @@ function isDoctor()
 
 function isPatient()
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -246,7 +239,6 @@ function isPatient()
 
 function isCurrentUser($id)
 {
-
     $user = \Auth::user();
     if (!$user) {
         return false;
@@ -279,7 +271,10 @@ function canSeePrivateDoctors($user)
     return in_array($user->type, ['admin','private-doctor', 'patient']);
 }
 
-
+function canSeeLabs($user)
+{
+    return in_array($user->type, ['admin','patient', 'owner', 'doctor']);
+}
 
 function canSeeNurses($user)
 {

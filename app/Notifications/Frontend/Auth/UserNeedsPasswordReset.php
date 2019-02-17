@@ -53,7 +53,7 @@ class UserNeedsPasswordReset extends Notification
         return (new MailMessage())
             ->subject(app_name().': '.__('strings.emails.auth.password_reset_subject'))
             ->line(__('strings.emails.auth.password_cause_of_email'))
-            ->action(__('buttons.emails.auth.reset_password'), route('frontend.auth.password.reset.form', $this->token))
+            ->action(__('buttons.emails.auth.reset_password'), route('password.reset.form', $this->token))
             ->line(__('strings.emails.auth.password_if_not_requested'));
     }
 }

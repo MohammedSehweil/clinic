@@ -20,7 +20,7 @@
                         </div>
                     @endif
 
-                    {{ html()->form('POST', route('frontend.auth.password.reset'))->class('form-horizontal')->open() }}
+                    {{ html()->form('POST', route('password.reset'))->class('form-horizontal')->open() }}
                         {{ html()->hidden('token', $token) }}
 
                         <div class="row">

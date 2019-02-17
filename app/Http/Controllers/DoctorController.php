@@ -44,9 +44,7 @@ class DoctorController extends Controller
                 ->whereIn('id', $doctorsIds)
                 ->orderBy('id', 'asc')
                 ->paginate(25);
-
-        } else if (isDoctor()) {
-
+        } elseif (isDoctor()) {
             $user = currentUser();
             $clinicsIds = UserClinicSpecialties::query()
                 ->join('clinic_specialties', 'clinic_specialties.id', '=', 'user_clinic_specialties.clinic_specialties_id')
@@ -64,16 +62,13 @@ class DoctorController extends Controller
                 ->whereIn('id', $doctorsIds)
                 ->orderBy('id', 'asc')
                 ->paginate(25);
-
         } else {
             $doctors = Doctor::query()
                 ->orderBy('id', 'asc')
                 ->paginate(25);
-
         }
 
         return view('doctor.index', compact('doctors'));
-
     }
 
     public function create(DoctorRequest $request)
@@ -156,7 +151,6 @@ class DoctorController extends Controller
                     'confirmed' => true,
                     'type' => 'doctor'
                 ]);
-
         } else {
             $doctor
                 ->update([

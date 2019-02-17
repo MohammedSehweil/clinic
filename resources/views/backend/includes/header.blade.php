@@ -86,7 +86,7 @@
               {{--<span class="badge badge-primary">42</span>--}}
             {{--</a>--}}
             <div class="divider"></div>
-            <a class="dropdown-item" href="{{ route('frontend.auth.logout') }}">
+            <a class="dropdown-item" href="{{ route('logout') }}">
                 <i class="fas fa-lock"></i> @lang('navs.general.logout')
             </a>
           </div>

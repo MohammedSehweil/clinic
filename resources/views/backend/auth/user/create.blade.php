@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    {{ html()->form('POST', route('admin.auth.user.store'))->class('form-horizontal')->open() }}
+    {{ html()->form('POST', route('admin.user.store'))->class('form-horizontal')->open() }}
         <div class="card">
             <div class="card-body">
                 <div class="row">
@@ -193,7 +193,7 @@
             <div class="card-footer clearfix">
                 <div class="row">
                     <div class="col">
-                        {{ form_cancel(route('admin.auth.user.index'), __('buttons.general.cancel')) }}
+                        {{ form_cancel(route('admin.user.index'), __('buttons.general.cancel')) }}
                     </div><!--col-->
 
                     <div class="col text-right">

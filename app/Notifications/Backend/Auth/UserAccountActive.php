@@ -37,7 +37,7 @@ class UserAccountActive extends Notification
         return (new MailMessage())
             ->subject(app_name())
             ->line(__('strings.emails.auth.account_confirmed'))
-            ->action(__('labels.frontend.auth.login_button'), route('frontend.auth.login'))
+            ->action(__('labels.frontend.auth.login_button'), route('login'))
             ->line(__('strings.emails.auth.thank_you_for_using_app'));
     }
 }

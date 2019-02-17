@@ -77,7 +77,7 @@ class UserController extends Controller
             'permissions'
         ));
 
-        return redirect()->route('admin.auth.user.index')->withFlashSuccess(__('alerts.backend.users.created'));
+        return redirect()->route('admin.user.index')->withFlashSuccess(__('alerts.backend.users.created'));
     }
 
     /**
@@ -128,7 +128,7 @@ class UserController extends Controller
             'permissions'
         ));
 
-        return redirect()->route('admin.auth.user.index')->withFlashSuccess(__('alerts.backend.users.updated'));
+        return redirect()->route('admin.user.index')->withFlashSuccess(__('alerts.backend.users.updated'));
     }
 
     /**
@@ -144,6 +144,6 @@ class UserController extends Controller
 
         event(new UserDeleted($user));
 
-        return redirect()->route('admin.auth.user.deleted')->withFlashSuccess(__('alerts.backend.users.deleted'));
+        return redirect()->route('admin.user.deleted')->withFlashSuccess(__('alerts.backend.users.deleted'));
     }
 }

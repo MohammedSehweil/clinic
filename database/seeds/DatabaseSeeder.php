@@ -14,11 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        $this->call([
+            // FacilitiesSeeder::class,
+        ]);
+        // Model::unguard();
 
 
-        $this->call(AuthTableSeeder::class);
+        // $this->call(AuthTableSeeder::class);
 
-        Model::reguard();
+        // Model::reguard();
     }
 }

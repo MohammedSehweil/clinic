@@ -25,13 +25,13 @@
             @endauth
 
             @guest
-                <li class="nav-item"><a href="{{route('frontend.auth.login')}}"
-                                        class="nav-link {{ active_class(Active::checkRoute('frontend.auth.login')) }}">@lang('navs.frontend.login')</a>
+                <li class="nav-item"><a href="{{route('login')}}"
+                                        class="nav-link {{ active_class(Active::checkRoute('login')) }}">@lang('navs.frontend.login')</a>
                 </li>
 
                 @if(config('access.registration'))
-                    <li class="nav-item"><a href="{{route('frontend.auth.register')}}"
-                                            class="nav-link {{ active_class(Active::checkRoute('frontend.auth.register')) }}">@lang('navs.frontend.register')</a>
+                    <li class="nav-item"><a href="{{route('register')}}"
+                                            class="nav-link {{ active_class(Active::checkRoute('register')) }}">@lang('navs.frontend.register')</a>
                     </li>
                 @endif
             @else
@@ -47,7 +47,7 @@
 
                         <a href="{{ route('frontend.user.account') }}"
                            class="dropdown-item {{ active_class(Active::checkRoute('frontend.user.account')) }}">@lang('navs.frontend.user.account')</a>
-                        <a href="{{ route('frontend.auth.logout') }}"
+                        <a href="{{ route('logout') }}"
                            class="dropdown-item">@lang('navs.general.logout')</a>
                     </div>
                 </li>

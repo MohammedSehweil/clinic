@@ -20,7 +20,7 @@
                         </div>
                     @endif
 
-                    {{ html()->form('POST', route('frontend.auth.password.email.post'))->open() }}
+                    {{ html()->form('POST', route('password.email.post'))->open() }}
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">

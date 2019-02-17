@@ -41,6 +41,33 @@
                 </li>
             @endif
 
+            @if(canSeeLabs($logged_in_user))
+                <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/lab*'), 'open') }}">
+                    <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/lab*')) }}"
+                       href="#">
+                        <i class="nav-icon icon-user"></i> Laboratory
+
+                        @if ($pending_approval > 0)
+                            <span class="badge badge-danger">{{ $pending_approval }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{ active_class(Active::checkUriPattern('admin/lab/*')) }}"
+                               href="{{ route('admin.lab.index') }}">
+                                Laboratories
+
+                                @if ($pending_approval > 0)
+                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+
             @if(canSeeDoctors($logged_in_user))
                 <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/doctor*'), 'open') }}">
                     <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/doctor*')) }}"
@@ -160,7 +187,7 @@
                     <ul class="nav-dropdown-items">
                         <li class="nav-item">
                             <a class="nav-link {{ active_class(Active::checkUriPattern('admin/auth/user*')) }}"
-                               href="{{ route('admin.auth.user.index') }}">
+                               href="{{ route('admin.user.index') }}">
                                 @lang('labels.backend.access.users.management')
 
                                 @if ($pending_approval > 0)
@@ -170,7 +197,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ active_class(Active::checkUriPattern('admin/auth/role*')) }}"
-                               href="{{ route('admin.auth.role.index') }}">
+                               href="{{ route('admin.role.index') }}">
                                 @lang('labels.backend.access.roles.management')
                             </a>
                         </li>

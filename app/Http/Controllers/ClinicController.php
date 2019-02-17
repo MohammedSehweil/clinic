@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
-use App\Http\Requests\Backend\Auth\Role\ClinicRequest;
 use App\Models\Auth\Clinic;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
 use App\Repositories\Backend\Auth\RoleRepository;
+use App\Http\Requests\Backend\Auth\Role\ClinicRequest;
 use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
@@ -29,7 +29,6 @@ class ClinicController extends Controller
      */
     public function index(ClinicRequest $request)
     {
-
         $doctorsFilter = $request->get('doctors', []);
         $clinicsFilter = $request->get('clinics', []);
         $specialtiesFilter = $request->get('specialties', []);
@@ -39,6 +38,7 @@ class ClinicController extends Controller
 
         $user = \Auth::user();
         $clinics = Clinic::query()
+            ->where('facility_id', Clinic::CLINIC_TYPE)
             ->when($clinicsFilter, function ($q) use ($clinicsFilter) {
                 return $q->whereIn('clinics.id', $clinicsFilter);
             })
@@ -81,7 +81,6 @@ class ClinicController extends Controller
             return view('clinic.partial.table', compact('clinics'));
         }
         return view('clinic.index', compact('clinics'));
-
     }
 
     /**
@@ -109,6 +108,7 @@ class ClinicController extends Controller
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
                 'description' => $request->get('description', null),
+                'facility_id' => Clinic::CLINIC_TYPE
             ]);
 
         $specialties = $request->get('specialties', []);
@@ -148,14 +148,12 @@ class ClinicController extends Controller
      */
     public function edit(ClinicRequest $request, Clinic $clinic)
     {
-
         return view('clinic.edit', compact('clinic'));
     }
 
 
     public function update(ClinicRequest $request, Clinic $clinic)
     {
-
         $clinic
             ->update(
                 [
@@ -199,7 +197,6 @@ class ClinicController extends Controller
 
     public function destroy(ClinicRequest $request, Clinic $clinic)
     {
-
         $clinic->delete();
 
         return redirect()->route('admin.clinic.index')->withFlashSuccess('The clinic was successfully deleted.');
@@ -226,6 +223,4 @@ class ClinicController extends Controller
 
         return response()->json(['message' => 'The clinic was successfully rejected.'], 200);
     }
-
-
 }

@@ -2,10 +2,11 @@
 
 namespace App\Models\Auth;
 
-use App\Models\Traits\DoctorAttribute;
 use App\Models\Traits\Uuid;
+use App\Models\Traits\DoctorAttribute;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Auth\Traits\Scope\UserScope;
 use App\Models\Auth\Traits\Method\UserMethod;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,8 +14,6 @@ use App\Models\Auth\Traits\SendUserPasswordReset;
 use App\Models\Auth\Traits\Attribute\UserAttribute;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Auth\Traits\Relationship\UserRelationship;
-use Illuminate\Database\Eloquent\Builder;
-
 
 /**
  * Class ClinicOwner.
@@ -100,6 +99,4 @@ class ClinicOwner extends Authenticatable
     {
         return $this->hasMany(UserClinicSpecialties::class, 'user_id');
     }
-
-
 }

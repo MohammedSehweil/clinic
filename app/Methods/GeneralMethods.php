@@ -2,7 +2,6 @@
 
 namespace App\Methods;
 
-
 use App\Models\Auth\Clinic;
 use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\Country;
@@ -14,7 +13,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GeneralMethods
 {
-
     public function getAllDoctors()
     {
         $doctors = Doctor::all();
@@ -29,9 +27,19 @@ class GeneralMethods
 
     public function getAllClinics()
     {
-        return Clinic::query()->pluck('name', 'id')->toArray();
+        return Clinic::query()
+            ->where('facility_id', Clinic::CLINIC_TYPE)
+            ->pluck('name', 'id')
+            ->toArray();
     }
 
+    public function getAllLabs()
+    {
+        return Clinic::query()
+            ->where('facility_id', Clinic::LAB_TYPE)
+            ->pluck('name', 'id')
+            ->toArray();
+    }
 
     public function getAllSpecialties()
     {
@@ -53,7 +61,8 @@ class GeneralMethods
 
 
     public function getClinicOwnerDoctorsIds()
-    { // return doctor ids.
+    {
+        // return doctor ids.
 
         $user = currentUser();
         if ($user->type != 'owner') {

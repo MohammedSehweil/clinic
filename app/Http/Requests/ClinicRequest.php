@@ -27,7 +27,7 @@ class ClinicRequest extends FormRequest
     public function rules()
     {
         $rules = [];
-        if(!$this->isMethod('GET')){
+        if (!$this->isMethod('GET') && !$this->isMethod('DELETE')) {
             $rules = [
                 'name' => 'required',
             ];
