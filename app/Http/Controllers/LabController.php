@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
-use App\Models\Auth\Clinic;
+use App\Models\Auth\Lab;
 use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
 use App\Events\Backend\Auth\Role\RoleDeleted;
@@ -33,8 +33,7 @@ class LabController extends Controller
 
 
         $user = \Auth::user();
-        $labs = Clinic::query()
-            ->where('facility_id', Clinic::LAB_TYPE)
+        $labs = Lab::query()
             ->when($labsFilter, function ($q) use ($labsFilter) {
                 return $q->whereIn('clinics.id', $labsFilter);
             })
@@ -90,7 +89,7 @@ class LabController extends Controller
     }
 
 
-    public function show(ClinicRequest $request, Clinic $lab)
+    public function show(ClinicRequest $request, Lab $lab)
     {
         return view('lab.show', compact('lab'));
     }
@@ -98,14 +97,13 @@ class LabController extends Controller
 
     public function store(ClinicRequest $request)
     {
-        $lab = Clinic::query()
+        $lab = Lab::query()
             ->create([
                 'name' => $request->get('name'),
                 'owner_id' => currentUser()->id,
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
-                'description' => $request->get('description', null),
-                'facility_id' => Clinic::LAB_TYPE
+                'description' => $request->get('description', null)
             ]);
 
         $specialties = $request->get('specialties', []);
@@ -144,12 +142,12 @@ class LabController extends Controller
      *
      * @return mixed
      */
-    public function edit(ClinicRequest $request, Clinic $lab)
+    public function edit(ClinicRequest $request, Lab $lab)
     {
         return view('lab.edit', compact('lab'));
     }
 
-    public function update(ClinicRequest $request, Clinic $lab)
+    public function update(ClinicRequest $request, Lab $lab)
     {
         $lab->update([
             'name' => $request->get('name'),
@@ -191,7 +189,7 @@ class LabController extends Controller
     }
 
 
-    public function destroy(ClinicRequest $request, Clinic $lab)
+    public function destroy(ClinicRequest $request, Lab $lab)
     {
         $lab->delete();
 
@@ -200,7 +198,7 @@ class LabController extends Controller
     }
 
 
-    public function approve(Clinic $lab)
+    public function approve(Lab $lab)
     {
         if (!$lab->approved) {
             $lab->approved = true;
@@ -212,7 +210,7 @@ class LabController extends Controller
     }
 
 
-    public function reject(Clinic $lab)
+    public function reject(Lab $lab)
     {
         if ($lab->approved) {
             $lab->approved = false;

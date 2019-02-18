@@ -12,7 +12,7 @@ trait ClinicAttribute
      */
     public function getEditButtonAttribute()
     {
-        return '<a href="' . route('admin.'.$this->clinicType.'.edit', $this) . '" class="btn btn-primary"><i class="fas fa-edit" data-toggle="tooltip" data-placement="top" title="' . __('buttons.general.crud.edit') . '"></i></a>';
+        return '<a href="' . route('admin.clinic.edit', $this) . '" class="btn btn-primary"><i class="fas fa-edit" data-toggle="tooltip" data-placement="top" title="' . __('buttons.general.crud.edit') . '"></i></a>';
     }
 
     /**
@@ -20,7 +20,7 @@ trait ClinicAttribute
      */
     public function getDeleteButtonAttribute()
     {
-        return '<a href="' . route('admin.'.$this->clinicType.'.destroy', $this) . '"
+        return '<a href="' . route('admin.clinic.destroy', $this) . '"
        data-method="delete"
        data-trans-button-cancel="' . __('buttons.general.cancel') . '"
        data-trans-button-confirm="' . __('buttons.general.crud.delete') . '"
@@ -33,7 +33,7 @@ trait ClinicAttribute
      */
     public function getShowButtonAttribute()
     {
-        return '<a href="' . route('admin.'.$this->clinicType.'.show', $this) . '" data-toggle="tooltip" data-placement="top" title="' . __('buttons.general.crud.view') . '" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+        return '<a href="' . route('admin.clinic.show', $this) . '" data-toggle="tooltip" data-placement="top" title="' . __('buttons.general.crud.view') . '" class="btn btn-info"><i class="fas fa-eye"></i></a>';
     }
 
 
@@ -42,7 +42,7 @@ trait ClinicAttribute
      */
     public function getApproveButtonAttribute()
     {
-        return '<a href="' . route('admin.'.$this->clinicType.'.approve', $this) . '" data-toggle="tooltip" data-placement="top" title="' . 'Approve' . '" class="btn btn-success change_status_button"><i class="fa fa-check"></i></a>';
+        return '<a href="' . route('admin.clinic.approve', $this) . '" data-toggle="tooltip" data-placement="top" title="' . 'Approve' . '" class="btn btn-success change_status_button"><i class="fa fa-check"></i></a>';
     }
 
 
@@ -51,7 +51,7 @@ trait ClinicAttribute
      */
     public function getRejectButtonAttribute()
     {
-        return '<a href="' . route('admin.'.$this->clinicType.'.reject', $this) . '" data-toggle="tooltip" data-placement="top" title="' . 'Reject' . '" class="btn btn-warning change_status_button"><i class="fa fa-ban"></i></a>';
+        return '<a href="' . route('admin.clinic.reject', $this) . '" data-toggle="tooltip" data-placement="top" title="' . 'Reject' . '" class="btn btn-warning change_status_button"><i class="fa fa-ban"></i></a>';
     }
 
 
@@ -63,7 +63,6 @@ trait ClinicAttribute
         $edit = '';
         $delete = '';
         $state = '';
-        $this->clinicType = $this->facility_id == self::CLINIC_TYPE ? 'clinic': 'lab';
         $user = \Auth::user();
         if (isAdmin() || $user->id == $this->owner_id) {
             $edit = $this->edit_button;

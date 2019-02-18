@@ -2,23 +2,26 @@
 
 namespace App\Models\Auth;
 
-use App\Models\Auth\Traits\Method\RoleMethod;
-use App\Models\Auth\Traits\Attribute\RoleAttribute;
 use App\Models\Traits\ClinicAttribute;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Auth\Traits\Scope\ClinicScope;
+use App\Models\Auth\Traits\Method\RoleMethod;
+use App\Models\Auth\Traits\Attribute\RoleAttribute;
 
 /**
  * Class Role.
  */
 class Clinic extends Model
 {
+    use ClinicScope;
     use ClinicAttribute;
+
     protected $table = 'clinics';
     protected $guarded = ['id'];
 
-
-    const CLINIC_TYPE = 9;
-    const LAB_TYPE = 3;
+    protected $attributes = [
+        'facility_id' => 9
+    ];
 
     public function specialties()
     {
@@ -28,16 +31,6 @@ class Clinic extends Model
     public function scopeApproved($query)
     {
         return $query->wherer('approved', true);
-    }
-
-    public function scopeIsClinic($query)
-    {
-        return $query->wherer('facility_id', self::CLINIC_TYPE);
-    }
-
-    public function scopeIsLab($query)
-    {
-        return $query->wherer('facility_id', self::LAB_TYPE);
     }
 
     public function country()

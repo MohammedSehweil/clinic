@@ -2,6 +2,7 @@
 
 namespace App\Methods;
 
+use App\Models\Auth\Lab;
 use App\Models\Auth\Clinic;
 use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\Country;
@@ -28,15 +29,13 @@ class GeneralMethods
     public function getAllClinics()
     {
         return Clinic::query()
-            ->where('facility_id', Clinic::CLINIC_TYPE)
             ->pluck('name', 'id')
             ->toArray();
     }
 
     public function getAllLabs()
     {
-        return Clinic::query()
-            ->where('facility_id', Clinic::LAB_TYPE)
+        return Lab::query()
             ->pluck('name', 'id')
             ->toArray();
     }

@@ -38,7 +38,6 @@ class ClinicController extends Controller
 
         $user = \Auth::user();
         $clinics = Clinic::query()
-            ->where('facility_id', Clinic::CLINIC_TYPE)
             ->when($clinicsFilter, function ($q) use ($clinicsFilter) {
                 return $q->whereIn('clinics.id', $clinicsFilter);
             })
@@ -107,8 +106,7 @@ class ClinicController extends Controller
                 'owner_id' => currentUser()->id,
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
-                'description' => $request->get('description', null),
-                'facility_id' => Clinic::CLINIC_TYPE
+                'description' => $request->get('description', null)
             ]);
 
         $specialties = $request->get('specialties', []);
