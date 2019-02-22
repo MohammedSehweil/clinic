@@ -247,8 +247,6 @@ function isCurrentUser($id)
 }
 
 
-
-
 function currentUser()
 {
     return \Auth::user();
@@ -268,15 +266,20 @@ function canSeeDoctors($user)
 
 function canSeePrivateDoctors($user)
 {
-    return in_array($user->type, ['admin','private-doctor', 'patient']);
+    return in_array($user->type, ['admin', 'private-doctor', 'patient']);
 }
 
 function canSeeLabs($user)
 {
-    return in_array($user->type, ['admin','patient', 'owner', 'doctor']);
+    return in_array($user->type, ['admin', 'patient', 'owner', 'doctor']);
 }
 
 function canSeeNurses($user)
 {
-    return in_array($user->type, ['admin','nurse', 'patient']);
+    return in_array($user->type, ['admin', 'nurse', 'patient']);
+}
+
+function canRegisterToClinic($user)
+{
+    return in_array($user->type, ['patient']);
 }

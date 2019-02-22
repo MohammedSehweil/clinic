@@ -15,6 +15,34 @@
                 @lang('menus.backend.sidebar.system')
             </li>
 
+
+            @if(canRegisterToClinic($logged_in_user))
+                <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/registration*'), 'open') }}">
+                    <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/registration*')) }}"
+                       href="#">
+                        <i class="nav-icon icon-user"></i> Registration
+
+                        @if ($pending_approval > 0)
+                            <span class="badge badge-danger">{{ $pending_approval }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="nav-dropdown-items">
+                        <li class="nav-item">
+                            <a class="nav-link {{ active_class(Active::checkUriPattern('admin/registration/*')) }}"
+                               href="{{ route('admin.registration.index') }}">
+                                Registration
+
+                                @if ($pending_approval > 0)
+                                    <span class="badge badge-danger">{{ $pending_approval }}</span>
+                                @endif
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
+
             @if(canSeeClinics($logged_in_user))
                 <li class="nav-item nav-dropdown {{ active_class(Active::checkUriPattern('admin/clinic*'), 'open') }}">
                     <a class="nav-link nav-dropdown-toggle {{ active_class(Active::checkUriPattern('admin/clinic*')) }}"

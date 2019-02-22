@@ -14,6 +14,12 @@ use App\Http\Controllers\Backend\Auth\User\UserConfirmationController;
  */
 
 
+
+Route::get('registration', 'Auth\Role\RegistrationController@index')
+    ->name('registration.index');
+
+
+
 Route::group(['middleware' => 'redirect_if_private'], function () {
     Route::get('clinic', 'Auth\Role\ClinicController@index')
         ->name('clinic.index');
