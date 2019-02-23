@@ -31,7 +31,7 @@ class RegistrationController extends Controller
 
     public function show(Request $request, $type)
     {
-        dd($type);
+        return view('registration.types.' . $type);
     }
 
 }
