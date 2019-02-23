@@ -19,6 +19,9 @@ Route::get('registration', 'Auth\Role\RegistrationController@index')
     ->name('registration.index');
 
 
+Route::get('registration/{type}', 'Auth\Role\RegistrationController@show')
+    ->name('registration.show');
+
 
 Route::group(['middleware' => 'redirect_if_private'], function () {
     Route::get('clinic', 'Auth\Role\ClinicController@index')

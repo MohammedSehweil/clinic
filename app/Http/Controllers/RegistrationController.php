@@ -12,6 +12,7 @@ use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
+use Illuminate\Http\Request;
 
 /**
  * Class RegistrationController.
@@ -25,8 +26,12 @@ class RegistrationController extends Controller
      */
     public function index(ClinicRequest $request)
     {
-        dd('SOON');
-        return view('lab.index', compact('labs'));
+        return view('registration.index');
+    }
+
+    public function show(Request $request, $type)
+    {
+        dd($type);
     }
 
 }
