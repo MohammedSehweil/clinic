@@ -75,7 +75,6 @@ class ClinicController extends Controller
             ->orderBy('id', 'asc')
             ->paginate(25);
 
-
         if ($request->get('view', false)) {
             return view('clinic.partial.table', compact('clinics'));
         }
