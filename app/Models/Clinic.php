@@ -45,4 +45,9 @@ class Clinic extends Model
     {
         return $this->belongsTo('Clinic\Models\facility');
     }
+
+    public function appointments()
+    {
+        return $this->hasMany('App\Models\Auth\Appointment');
+    }
 }

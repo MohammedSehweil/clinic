@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
-use App\Http\Requests\Backend\Auth\Role\PatientRequest;
-use App\Models\Auth\Patient;
 use App\Models\Auth\Role;
-use App\Http\Controllers\Controller;
-use App\Events\Backend\Auth\Role\RoleDeleted;
 use App\Models\Auth\User;
+use App\Models\Auth\Patient;
+use Illuminate\Http\Request;
+use App\Models\Auth\Appointment;
+use App\Models\Auth\MedicalRecord;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\AppointmentsResource;
+use App\Events\Backend\Auth\Role\RoleDeleted;
 use App\Repositories\Backend\Auth\RoleRepository;
+use App\Http\Requests\Backend\Auth\Role\PatientRequest;
 use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
@@ -25,7 +29,6 @@ class PatientController extends Controller
 
     public function index(PatientRequest $request)
     {
-
         if (true) {
             $patients = Patient::query()
                 ->orderBy('id', 'asc')
@@ -41,7 +44,6 @@ class PatientController extends Controller
 
 
         return view('patient.index', compact('patients'));
-
     }
 
     public function create(PatientRequest $request)
@@ -84,15 +86,12 @@ class PatientController extends Controller
      */
     public function edit(PatientRequest $request, Patient $patient)
     {
-
         return view('patient.edit', compact('patient'));
     }
 
 
     public function update(PatientRequest $request, Patient $patient)
     {
-
-
         if (isCurrentUser($patient->id)) {
             $patient
                 ->update([
@@ -105,7 +104,6 @@ class PatientController extends Controller
                     'confirmed' => true,
                     'type' => 'patient'
                 ]);
-
         } else {
             $patient
                 ->update([
@@ -125,7 +123,6 @@ class PatientController extends Controller
         return redirect()->route('admin.patient.index')->withFlashSuccess('The patient was successfully updated.');
     }
 
-
     /**
      * @param PatientRequest $request
      * @param Patient $patient
@@ -134,9 +131,32 @@ class PatientController extends Controller
      */
     public function destroy(PatientRequest $request, Patient $patient)
     {
-
         $patient->delete();
 
         return redirect()->route('admin.patient.index')->withFlashSuccess('The patient was successfully deleted.');
+    }
+
+    public function reserve(Request $request)
+    {
+        $appointment = Appointment::find($request->get('appointment_id'));
+
+        if (! \Auth::user()->medicalRecord) {
+            $medicalRecord = new MedicalRecord();
+            $medicalRecord->user_id = \Auth::user()->id;
+
+            \Auth::user()->medicalRecord()->save($medicalRecord);
+        }
+
+        if ($appointment && ! $appointment->reserved) {
+            $appointment->update([
+                'reserved' => true,
+                'patient_id' => \Auth::user()->id
+            ]);
+        }
+    }
+
+    public function getAppointments()
+    {
+        return new AppointmentsResource(\Auth::user()->myAppointments);
     }
 }

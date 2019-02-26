@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
-use App\Http\Requests\Backend\Auth\Role\DoctorRequest;
+use App\Models\Auth\Role;
+use App\Models\Auth\User;
 use App\Models\Auth\Clinic;
-use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\Doctor;
 use App\Models\Auth\Patient;
-use App\Models\Auth\Role;
 use App\Http\Controllers\Controller;
-use App\Events\Backend\Auth\Role\RoleDeleted;
-use App\Models\Auth\User;
+use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\UserClinicSpecialties;
+use App\Http\Resources\AppointmentsResource;
+use App\Events\Backend\Auth\Role\RoleDeleted;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
+use App\Http\Requests\Backend\Auth\Role\DoctorRequest;
 
 /**
  * Class DoctorController.
@@ -29,7 +30,6 @@ class DoctorController extends Controller
 
     public function index(DoctorRequest $request)
     {
-
         if (isOwner()) {
             $user = currentUser();
             $doctorsIds = Clinic::query()
@@ -130,15 +130,12 @@ class DoctorController extends Controller
      */
     public function edit(DoctorRequest $request, Doctor $doctor)
     {
-
         return view('doctor.edit', compact('doctor'));
     }
 
 
     public function update(DoctorRequest $request, Doctor $doctor)
     {
-
-
         if (isCurrentUser($doctor->id)) {
             $doctor
                 ->update([
@@ -190,12 +187,16 @@ class DoctorController extends Controller
 
     public function destroy(DoctorRequest $request, Doctor $doctor)
     {
-
         try {
             $doctor->delete();
         } catch (\Exception $e) {
         }
 
         return redirect()->route('admin.doctor.index')->withFlashSuccess('The doctor was successfully deleted.');
+    }
+
+    public function getAppointments()
+    {
+        return new AppointmentsResource(\Auth::user()->appointments);
     }
 }
