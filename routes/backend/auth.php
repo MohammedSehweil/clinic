@@ -51,6 +51,15 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
 
         Route::delete('/', 'Auth\Role\ClinicController@destroy')
             ->name('clinic.destroy');
+
+        Route::get('appointments/{appointmentId}/confirm', 'Auth\Role\ClinicController@confirmAppointment')
+            ->name('clinic.appointment.confirm');
+
+        Route::get('appointments/{appointmentId}/reject', 'Auth\Role\ClinicController@rejectAppointment')
+            ->name('clinic.appointment.reject');
+
+        Route::get('appointments', 'Auth\Role\PatientController@getAppointments')
+            ->name('clinic.appointments');
     });
 
     Route::get('lab', 'Auth\Role\LabController@index')
@@ -116,6 +125,7 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
         Route::delete('/', 'Auth\Role\PatientController@destroy')->name('patient.destroy');
         Route::post('appointment/reserve', 'Auth\Role\PatientController@reserve')->name('patient.reserve');
         Route::get('appointments', 'Auth\Role\PatientController@getAppointments')->name('patient.appointments');
+        Route::get('appointments/any', 'Auth\Role\PatientController@anyAppointment')->name('patient.any.appointment');
     });
 });
 

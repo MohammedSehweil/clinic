@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Backend\Auth\Role;
 
 use App\Models\Auth\Role;
 use App\Models\Auth\User;
+use App\Models\Auth\Clinic;
 use App\Models\Auth\Patient;
 use Illuminate\Http\Request;
 use App\Models\Auth\Appointment;
+use App\Models\Auth\Specialties;
 use App\Models\Auth\MedicalRecord;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AppointmentsResource;
@@ -155,8 +157,33 @@ class PatientController extends Controller
         }
     }
 
-    public function getAppointments()
+    public function getAppointments(PatientRequest $request, $patientId)
     {
-        return new AppointmentsResource(\Auth::user()->myAppointments);
+        return new AppointmentsResource(User::find($patientId)->myAppointments);
+    }
+
+    public function anyAppointment(PatientRequest $request)
+    {
+        $appointments = [];
+
+        if ($request->get('start_at') && $request->get('specialty')) {
+            $clinics = Specialties::find(11)// $request->get('specialty'))
+                ->clinics
+                ->map(function ($clinic) use ($request, &$appointments) {
+                    array_push($appointments, $clinic->appointments()
+                        ->available()
+                        ->where('start_at', '2019-02-26 21:14:24') //$request->get('start_at'))
+                        ->get());
+                });
+
+            foreach (array_flatten($appointments, 1) as $appointment) {
+                $appointment->update([
+                    'status' => 0,
+                    'reserved' => true,
+                    'patient_id' => \Auth::user()->id,
+                    'group_code' => \Auth::user()->id.'#'.$request->get('specialty')
+                ]);
+            }
+        }
     }
 }
