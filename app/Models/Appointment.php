@@ -13,6 +13,16 @@ class Appointment extends Model
         2 => 'Clinic Serive'
     ];
 
+    const STATUS_MAP = [
+        0 => 'Pending',
+        1 => 'Confirmed'
+    ];
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('reserved', false);
+    }
+
     /**
      * Get the user for the medicalRecord.
      */

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Backend\Auth\Role;
 
 use App\Models\Auth\Clinic;
 use App\Models\Auth\Role;
+use App\Models\Auth\Appointment;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\AppointmentsResource;
 use App\Events\Backend\Auth\Role\RoleDeleted;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Http\Requests\Backend\Auth\Role\ClinicRequest;
@@ -219,5 +222,46 @@ class ClinicController extends Controller
         }
 
         return response()->json(['message' => 'The clinic was successfully rejected.'], 200);
+    }
+
+
+    public function getAppointments(ClinicRequest $request, $clinicId)
+    {
+        $appointments = Clinic::find($clinicId)->appointments;
+
+        return new AppointmentsResource($appointments);
+    }
+
+    public function confirmAppointment(ClinicRequest $request, $clinicId, $appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+
+        $appointments = Appointment::where('group_code', $appointment->group_code)
+            ->where('id', '!=', $appointment->id)
+            ->get()
+            ->map(function ($appointment) {
+                return $appointment->update([
+                    'reserved' => false,
+                    'patient_id' => null,
+                    'group_code' => ''
+                ]);
+            });
+
+        $appointment->update(['status' => true, 'group_code' => '']);
+
+        return new AppointmentResource($appointment);
+    }
+
+    public function rejectAppointment(ClinicRequest $request, $clinicId, $appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+
+        $appointment->update([
+            'patient_id' => null,
+            'reserved' => false,
+            'group_code' => ''
+        ]);
+
+        return new AppointmentsResource(Clinic::find($clinicId)->appointments);
     }
 }
