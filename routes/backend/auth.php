@@ -28,6 +28,7 @@ Route::get('registration/{type}', 'Auth\Role\RegistrationController@show')
 Route::group(['middleware' => 'redirect_if_private'], function () {
 
     Route::get('api/clinics/specialties', 'Role\ClinicController@getClinicsSpecialties');
+    Route::get('api/specialties/doctors', 'Role\ClinicController@getSpecialtiesDoctors');
 
 
     Route::get('clinic', 'Auth\Role\ClinicController@index')

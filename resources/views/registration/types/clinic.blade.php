@@ -118,7 +118,13 @@
                                 <div class="form-group col-md-6">
                                     <label for="phone">Choose Specialties</label>
                                     {!! Form::select('patientSpecialties[]', [], null, ['id' => 'patientSpecialties','class' => 'form-control select2_class_specialties_for_patient']); !!}
-                                    <small></small>
+                                    <small>Not required</small>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="phone">Choose Doctors</label>
+                                    {!! Form::select('patientDoctors[]', [], null, ['id' => 'patientDoctors','class' => 'form-control select2_class_doctors_for_patient']); !!}
+                                    <small>Not required</small>
                                 </div>
 
 
@@ -148,13 +154,6 @@
             });
         });
 
-
-        $('#patientClinics').on('select2:select', function (e) {
-            var data = e.params.data;
-            console.log(data);
-        });
-
-
     </script>
 
 
@@ -179,6 +178,10 @@
             placeholder: "Select Specialties",
         });
 
+        $('.select2_class_doctors_for_patient').select2({
+            placeholder: "Select Doctors",
+        });
+
 
         $(function () {
             $('#datetimepicker12').datetimepicker({
@@ -199,7 +202,21 @@
                 }
             });
 
-            console.log(clinicsIds);
+        });
+
+
+        $('#patientSpecialties').on('select2:select', function (e) {
+            var specialtiesId = $(this).val();
+
+            $('#patientDoctors').select2({
+                ajax: {
+                    url: '/api/specialties/doctors',
+                    data: {
+                        'specialtiesId': specialtiesId
+                    }
+                }
+            });
+
         });
 
     </script>

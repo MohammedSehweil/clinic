@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Auth\Role;
 
 use App\Methods\ClinicMethods;
+use App\Methods\DoctorMethods;
 use App\Models\Auth\Clinic;
 use App\Models\Auth\Role;
 use App\Models\Auth\Appointment;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\AppointmentsResource;
 use App\Events\Backend\Auth\Role\RoleDeleted;
+use App\Models\Auth\Specialties;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Http\Requests\Backend\Auth\Role\ClinicRequest;
 use App\Repositories\Backend\Auth\PermissionRepository;
@@ -272,5 +274,19 @@ class ClinicController extends Controller
         $clinicsIds = $request->get('clinicsIds', []);
         $specialties = app(ClinicMethods::class)->getClinicsSpecialties($clinicsIds);
         return ['results' => $specialties];
+    }
+
+    public function getSpecialtiesDoctors(Request $request)
+    {
+        $specialtiesId = $request->get('specialtiesId', []);
+        $doctors = app(DoctorMethods::class)->getSpecialtiesDoctors(Specialties::find($specialtiesId));
+        $doctorsArray = [];
+        foreach ($doctors as $doctorId => $doctorName) {
+            $doctorsArray[] = [
+                'text' => $doctorName,
+                'id' => $doctorId,
+            ];
+        }
+        return ['results' => $doctorsArray];
     }
 }
