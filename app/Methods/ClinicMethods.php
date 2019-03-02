@@ -6,6 +6,7 @@ namespace App\Methods;
 use App\Models\Auth\Clinic;
 use App\Models\Auth\ClinicSpecialties;
 use App\Models\Auth\Doctor;
+use App\Models\Auth\Specialties;
 use App\Models\Auth\UserClinicSpecialties;
 use Illuminate\Database\Eloquent\Model;
 
@@ -63,5 +64,25 @@ class ClinicMethods
         }
         return Clinic::find($clinic);
     }
+
+    public function getClinicsSpecialties($clinics)
+    {
+        $specialtiesIds = ClinicSpecialties::query()
+            ->whereIn('clinic_id', array_map('intval', $clinics))
+            ->pluck('specialties_id')
+            ->toArray();
+
+        return Specialties::query()
+            ->whereIn('id', $specialtiesIds)
+            ->get(['name', 'id'])
+            ->map(function ($item) {
+                return [
+                    'id' => $item['id'],
+                    'text' => $item['name'],
+                ];
+            })
+            ->toArray();
+    }
+
 
 }

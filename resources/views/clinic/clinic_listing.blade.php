@@ -134,4 +134,9 @@
         float: right;
         margin-left: 3px;
     }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
 </style>

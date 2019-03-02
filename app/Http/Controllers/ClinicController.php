@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
+use App\Methods\ClinicMethods;
 use App\Models\Auth\Clinic;
 use App\Models\Auth\Role;
 use App\Models\Auth\Appointment;
@@ -15,6 +16,7 @@ use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
+use Illuminate\Http\Request;
 
 /**
  * Class ClinicController.
@@ -263,5 +265,12 @@ class ClinicController extends Controller
         ]);
 
         return new AppointmentsResource(Clinic::find($clinicId)->appointments);
+    }
+
+    public function getClinicsSpecialties(Request $request)
+    {
+        $clinicsIds = $request->get('clinicsIds', []);
+        $specialties = app(ClinicMethods::class)->getClinicsSpecialties($clinicsIds);
+        return ['results' => $specialties];
     }
 }
