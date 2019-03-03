@@ -140,20 +140,28 @@ class PatientController extends Controller
 
     public function reserve(Request $request)
     {
-        $appointment = Appointment::find($request->get('appointment_id'));
+        $clinics = Clinic::whereIn('id', $request->get('clinic_ids'));
 
-        if (! \Auth::user()->medicalRecord) {
-            $medicalRecord = new MedicalRecord();
-            $medicalRecord->user_id = \Auth::user()->id;
+        foreach ($clinics as $clinic) {
+            $appointment = Appointment::find($clinic->appointments[0]);
 
-            \Auth::user()->medicalRecord()->save($medicalRecord);
-        }
 
-        if ($appointment && ! $appointment->reserved) {
-            $appointment->update([
-                'reserved' => true,
-                'patient_id' => \Auth::user()->id
-            ]);
+            if (! \Auth::user()->medicalRecord) {
+                $medicalRecord = new MedicalRecord();
+                $medicalRecord->user_id = \Auth::user()->id;
+
+                \Auth::user()->medicalRecord()->save($medicalRecord);
+            }
+
+            if ($appointment && ! $appointment->reserved) {
+                $appointment->update([
+                    'reserved' => true,
+                    'patient_id' => \Auth::user()->id,
+                    'status' => 0,
+                    'group_code' => \Auth::user()->id.'#'.$clinics->pluck('id')
+
+                ]);
+            }
         }
     }
 
@@ -167,12 +175,12 @@ class PatientController extends Controller
         $appointments = [];
 
         if ($request->get('start_at') && $request->get('specialty')) {
-            $clinics = Specialties::find(11)// $request->get('specialty'))
+            $clinics = Specialties::find($request->get('specialty'))
                 ->clinics
                 ->map(function ($clinic) use ($request, &$appointments) {
                     array_push($appointments, $clinic->appointments()
                         ->available()
-                        ->where('start_at', '2019-02-26 21:14:24') //$request->get('start_at'))
+                        ->where('start_at', $request->get('start_at'))
                         ->get());
                 });
 
@@ -185,5 +193,38 @@ class PatientController extends Controller
                 ]);
             }
         }
+    }
+
+    public function search(Request $request)
+    {
+        $appointments= $this->loadQuery($request)
+            ->get();
+
+        return $appointments->map(function ($appointment) {
+            return [
+                'id' => $appointment->clinic->id,
+                'name' =>$appointment->clinic->name
+            ];
+        });
+    }
+
+    public function loadQuery($request)
+    {
+        // Allow custom params from request
+        $permittedParams = ['doctor_id', 'service_type', 'clinic_id', 'start_at'];
+
+        $query = Appointment::query()->where('reserved', false);
+
+        foreach ($permittedParams as $param) {
+            if ($value = $request->get($param)) {
+                $query->where($param, $value);
+            }
+        }
+
+        if ($request->get('range')) {
+            return $query->whereBetween('start_at', $request->get('range'));
+        }
+
+        return $query;
     }
 }
