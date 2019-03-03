@@ -50,29 +50,6 @@
                 </div>
             </div>
             <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <strong>Patient</strong>
-                            <small>Personal Info</small>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input class="form-control" id="name" type="text" placeholder="Enter your Name"
-                                       required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input class="form-control" id="phone" type="text"
-                                       placeholder="Enter your phone number" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
 
 
             <div class="row">
@@ -85,30 +62,35 @@
                         <div class="card-body">
                             <div class="row">
 
+                                {{--<div class="form-group col-md-6">--}}
+                                    {{--<label for="phone">Service Location</label>--}}
+                                    {{--{!! Form::select('service_location', ['home' => 'Home', 'clinic' => 'Clinic'], null, ['id' => 'service_location','class' => 'form-control select2_class_service_location']); !!}--}}
+                                    {{--<small>Type the other location then press enter</small>--}}
+
+                                {{--</div>--}}
+
                                 <div class="form-group col-md-6">
-                                    <label for="phone">Service Location</label>
-                                    {!! Form::select('service_location', ['home' => 'Home', 'clinic' => 'Clinic'], null, ['id' => 'service_location','class' => 'form-control select2_class_service_location']); !!}
-                                    <small>Type the other location then press enter</small>
-
-                                </div>
-
-                                <div class="form-group col-md-9">
                                     <label> Choose appointment</label>
-                                    <div style="overflow:hidden;">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <div id="datetimepicker12"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <input type="text" class="form-control" name="datetimes"/>
+
+                                    <script>
+                                        $(function () {
+                                            $('input[name="datetimes"]').daterangepicker({
+                                                timePicker: true,
+                                                startDate: moment().startOf('hour'),
+                                                endDate: moment().startOf('hour').add(32, 'hour'),
+                                                locale: {
+                                                    format: 'M/DD hh:mm A'
+                                                }
+                                            });
+                                        });
+                                    </script>
                                 </div>
 
 
                                 <div class="form-group col-md-6">
                                     <label for="phone">Choose Clinic</label>
-                                    {!! Form::select('patientClinics[]', app(\App\Methods\GeneralMethods::class)->getAllClinics(), null, ['id' => 'patientClinics','class' => 'form-control select2_class_clinics_for_patient', 'multiple' => 'multiple']); !!}
+                                    {!! Form::select('patientClinics[]', [], null, ['id' => 'patientClinics','class' => 'form-control select2_class_clinics_for_patient', 'multiple' => 'multiple']); !!}
                                     <small>You can choose multiple clinics, An appointment will be made to you at the
                                         first clinic that approves your application
                                     </small>
@@ -164,6 +146,9 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.min.css">
 
 @endpush
 
@@ -224,4 +209,5 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.3/daterangepicker.min.js"></script>
 @endpush
