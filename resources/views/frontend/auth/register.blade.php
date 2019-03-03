@@ -91,6 +91,22 @@
                     </div>
 
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                {{ html()->label('Phone Number')->for('phone') }}
+
+                                {{ html()->text('phone')
+                                    ->class('form-control')
+                                    ->placeholder('Phone Number')
+                                    ->attribute('maxlength', 191) }}
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                     @if(config('access.captcha.registration'))
                         <div class="row">
                             <div class="col">
