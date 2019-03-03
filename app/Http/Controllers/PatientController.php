@@ -186,4 +186,32 @@ class PatientController extends Controller
             }
         }
     }
+
+    public function search(Request $request)
+    {
+        $appointments= $this->loadQuery($request)
+            ->get();
+
+        return new AppointmentsResource($appointments);
+    }
+
+    public function loadQuery($request)
+    {
+        // Allow custom params from request
+        $permittedParams = ['doctor_id', 'service_type', 'clinic_id', 'start_at'];
+
+        $query = Appointment::query()->where('reserved', false);
+
+        foreach ($permittedParams as $param) {
+            if ($value = $request->get($param)) {
+                $query->where($param, $value);
+            }
+        }
+
+        if ($request->get('range')) {
+            return $query->whereBetween('start_at', $request->get('range'));
+        }
+
+        return $query;
+    }
 }

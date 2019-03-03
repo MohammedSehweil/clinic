@@ -26,7 +26,6 @@ Route::get('registration/{type}', 'Auth\Role\RegistrationController@show')
 
 
 Route::group(['middleware' => 'redirect_if_private'], function () {
-
     Route::get('api/clinics/specialties', 'Role\ClinicController@getClinicsSpecialties');
     Route::get('api/specialties/doctors', 'Role\ClinicController@getSpecialtiesDoctors');
 
@@ -132,6 +131,7 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
         Route::delete('/', 'Auth\Role\PatientController@destroy')->name('patient.destroy');
         Route::post('appointment/reserve', 'Auth\Role\PatientController@reserve')->name('patient.reserve');
         Route::get('appointments', 'Auth\Role\PatientController@getAppointments')->name('patient.appointments');
+        Route::get('appointments/search', 'Auth\Role\PatientController@getAppointments')->name('patient.search.appointments');
         Route::get('appointments/any', 'Auth\Role\PatientController@anyAppointment')->name('patient.any.appointment');
     });
 });
