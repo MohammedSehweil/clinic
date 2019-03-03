@@ -155,8 +155,11 @@ class PatientController extends Controller
 
             if ($appointment && ! $appointment->reserved) {
                 $appointment->update([
-                'reserved' => true,
-                'patient_id' => \Auth::user()->id
+                    'reserved' => true,
+                    'patient_id' => \Auth::user()->id,
+                    'status' => 0,
+                    'group_code' => \Auth::user()->id.'#'.$clinics->pluck('id')
+
                 ]);
             }
         }
