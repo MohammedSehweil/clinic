@@ -6,39 +6,12 @@
 
 
 
-
-    <div class="modal fade" id="clinicModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-primary modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Clinics</h4>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    @include('clinic.clinic_listing')
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer">
-
-                </div>
-            </div>
-
+    <div class="card">
+        <div class="card-body">
+            @include('clinic.clinic_listing_with_filters')
         </div>
-
     </div>
+
 
     <div class="card">
         <div class="card-body">
@@ -61,32 +34,6 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-
-                                {{--<div class="form-group col-md-6">--}}
-                                    {{--<label for="phone">Service Location</label>--}}
-                                    {{--{!! Form::select('service_location', ['home' => 'Home', 'clinic' => 'Clinic'], null, ['id' => 'service_location','class' => 'form-control select2_class_service_location']); !!}--}}
-                                    {{--<small>Type the other location then press enter</small>--}}
-
-                                {{--</div>--}}
-
-                                <div class="form-group col-md-6">
-                                    <label> Choose appointment</label>
-                                    <input type="text" class="form-control" name="datetimes"/>
-
-                                    <script>
-                                        $(function () {
-                                            $('input[name="datetimes"]').daterangepicker({
-                                                timePicker: true,
-                                                startDate: moment().startOf('hour'),
-                                                endDate: moment().startOf('hour').add(32, 'hour'),
-                                                locale: {
-                                                    format: 'M/DD hh:mm A'
-                                                }
-                                            });
-                                        });
-                                    </script>
-                                </div>
-
 
                                 <div class="form-group col-md-6">
                                     <label for="phone">Choose Clinic</label>
@@ -117,9 +64,7 @@
             </div>
 
 
-            <button class="btn btn-primary mb-1" type="button" data-toggle="modal" data-target="#clinicModal">Show All
-                Clinics
-            </button>
+            <button class="btn btn-primary mb-1" type="button" data-toggle="modal" data-target="#clinicModal">Reserve Appointment</button>
 
 
         </div>
@@ -132,7 +77,6 @@
         $(document).ready(function () {
             $('.select2_class_service_location').select2({
                 placeholder: "Select Service Location",
-                tags: true,
             });
         });
 

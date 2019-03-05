@@ -19,7 +19,9 @@ class CreateAppointmentsTable extends Migration
             $table->unsignedInteger('patient_id')->index()->nullable();
             $table->unsignedInteger('clinic_id')->index()->nullable();
             $table->timestamp('start_at');
+
             $table->unsignedInteger('service_type');
+
             $table->boolean('reserved')->default(true);
 
             $table->foreign('doctor_id')

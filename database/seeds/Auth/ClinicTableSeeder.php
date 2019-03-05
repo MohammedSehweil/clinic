@@ -25,6 +25,7 @@ class ClinicTableSeeder extends Seeder
             'owner_id' => 4,
             'country_id' => 170,
             'city' => 'Ramallah',
+            'service_location' => 'home',
         ]);
 
         $second = \App\Models\Auth\Clinic::create([
@@ -33,6 +34,8 @@ class ClinicTableSeeder extends Seeder
             'owner_id' => 4,
             'country_id' => 170,
             'city' => 'Nablus',
+            'service_location' => 'clinic',
+
 
 
         ]);

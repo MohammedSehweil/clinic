@@ -25,6 +25,9 @@ class CreateClinicsTable extends Migration
             $table->unsignedInteger('country_id')->index();
 
             $table->text('city')->nullable();
+
+            $table->text('service_location')->nullable();
+
             $table->longText('description')->nullable();
 
 

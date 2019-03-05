@@ -18,6 +18,7 @@ use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 /**
@@ -41,6 +42,16 @@ class ClinicController extends Controller
         $specialtiesFilter = $request->get('specialties', []);
         $countriesFilter = $request->get('countries', []);
         $cityFilter = $request->get('city', []);
+        $appointment = $request->get('appointment', []);
+        $serviceLocation = $request->get('service_location', []);
+
+        $from = $to = null;
+
+        if ($appointment) {
+            list($from, $to) = explode('-', $appointment);
+            $from = Carbon::parse($from);
+            $to = Carbon::parse($from);
+        }
 
 
         $user = \Auth::user();
@@ -79,6 +90,9 @@ class ClinicController extends Controller
                     return $query;
                 });
             })
+            ->when($serviceLocation, function ($q) use ($serviceLocation) {
+                return $q->where('service_location', $serviceLocation);
+            })
             ->orderBy('id', 'asc')
             ->paginate(25);
 
@@ -112,7 +126,8 @@ class ClinicController extends Controller
                 'owner_id' => currentUser()->id,
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
-                'description' => $request->get('description', null)
+                'description' => $request->get('description', null),
+                'service_location' => $request->get('service_location', null)
             ]);
 
         $specialties = $request->get('specialties', []);
@@ -165,6 +180,8 @@ class ClinicController extends Controller
                     'country_id' => $request->get('country_id'),
                     'city' => $request->get('city', null),
                     'description' => $request->get('description', null),
+                    'service_location' => $request->get('service_location', null),
+
                 ]
             );
 
