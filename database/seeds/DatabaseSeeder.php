@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // FacilitiesSeeder::class,
         ]);
-        // Model::unguard();
+         Model::unguard();
 
 
-        // $this->call(AuthTableSeeder::class);
+         $this->call(AuthTableSeeder::class);
 
-        // Model::reguard();
+         Model::reguard();
     }
 }

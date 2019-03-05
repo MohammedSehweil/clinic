@@ -71,6 +71,32 @@
 
 
                     <div class="form-group row">
+                        {{ html()->label('service_location')
+                            ->class('col-md-2 form-control-label')
+                            ->for('service_location') }}
+
+                        <div class="col-md-4">
+                            {!! Form::select('service_location', ['home' => 'Home', 'clinic' => 'Clinic'], null, ['id' => 'service_location','class' => 'form-control select2_class_service_location']); !!}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        {{ html()->label('Service Location')
+                            ->class('col-md-2 form-control-label')
+                            ->for('service_location') }}
+
+                        <div class="col-md-4">
+                            {{ html()->text('service_location')
+                                ->class('form-control')
+                                ->placeholder('Service Location')
+                                ->required()
+                                ->autofocus() }}
+                        </div><!--col-->
+                    </div>
+
+
+                    <div class="form-group row">
                         {{ html()->label('Description')
                             ->class('col-md-2 form-control-label')
                             ->for('description') }}
@@ -112,6 +138,10 @@
             $('.select2_class_specialties').select2({
                 placeholder: "Select Specialties",
                 tags: true
+            });
+
+            $('.select2_class_service_location').select2({
+                placeholder: "Select Specialties",
             });
         });
     </script>

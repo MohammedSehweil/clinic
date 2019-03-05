@@ -25,6 +25,7 @@ class AuthTableSeeder extends Seeder
         $this->call(UserRoleTableSeeder::class);
 
         $this->call(ClinicTableSeeder::class);
+        $this->call(AppointmentTableSeeder::class);
 
         $this->enableForeignKeys();
     }

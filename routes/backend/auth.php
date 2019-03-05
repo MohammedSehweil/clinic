@@ -23,7 +23,13 @@ Route::get('registration/{type}', 'Auth\Role\RegistrationController@show')
     ->name('registration.show');
 
 
+
+
 Route::group(['middleware' => 'redirect_if_private'], function () {
+    Route::get('api/clinics/specialties', 'Role\ClinicController@getClinicsSpecialties');
+    Route::get('api/specialties/doctors', 'Role\ClinicController@getSpecialtiesDoctors');
+
+
     Route::get('clinic', 'Auth\Role\ClinicController@index')
         ->name('clinic.index');
 
@@ -51,6 +57,15 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
 
         Route::delete('/', 'Auth\Role\ClinicController@destroy')
             ->name('clinic.destroy');
+
+        Route::get('appointments/{appointmentId}/confirm', 'Auth\Role\ClinicController@confirmAppointment')
+            ->name('clinic.appointment.confirm');
+
+        Route::get('appointments/{appointmentId}/reject', 'Auth\Role\ClinicController@rejectAppointment')
+            ->name('clinic.appointment.reject');
+
+        Route::get('appointments', 'Auth\Role\PatientController@getAppointments')
+            ->name('clinic.appointments');
     });
 
     Route::get('lab', 'Auth\Role\LabController@index')
@@ -96,6 +111,7 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
         Route::get('show', 'Auth\Role\DoctorController@show')->name('doctor.show');
         Route::patch('/', 'Auth\Role\DoctorController@update')->name('doctor.update');
         Route::delete('/', 'Auth\Role\DoctorController@destroy')->name('doctor.destroy');
+        Route::get('appointments', 'Auth\Role\DoctorController@getAppointments')->name('doctor.appointments');
     });
 
 
@@ -113,6 +129,10 @@ Route::group(['middleware' => 'redirect_if_private'], function () {
         Route::get('show', 'Auth\Role\PatientController@show')->name('patient.show');
         Route::patch('/', 'Auth\Role\PatientController@update')->name('patient.update');
         Route::delete('/', 'Auth\Role\PatientController@destroy')->name('patient.destroy');
+        Route::post('appointment/reserve', 'Auth\Role\PatientController@reserve')->name('patient.reserve');
+        Route::get('appointments', 'Auth\Role\PatientController@getAppointments')->name('patient.appointments');
+        Route::get('appointments/search', 'Auth\Role\PatientController@getAppointments')->name('patient.search.appointments');
+        Route::get('appointments/any', 'Auth\Role\PatientController@anyAppointment')->name('patient.any.appointment');
     });
 });
 

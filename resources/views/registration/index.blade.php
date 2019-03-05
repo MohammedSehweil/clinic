@@ -44,7 +44,7 @@
                     <a href="{{route('admin.registration.show', ['type' => 'private-doctor'])}}">
                         <div class="card mr-4" style="width: 16rem;">
                             <img class="card-img-top"
-                                 src="https://nationalcarelink.com/images/JPEGS/services_deeper_page_images_private_doctor.jpg"
+                                 src="https://www.kevinmd.com/blog/wp-content/uploads/shutterstock_154662227.jpg"
                                  height="180px"
                                  alt="Private Doctor image">
                             <div class="card-body">

@@ -14,7 +14,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Auth\Traits\Relationship\UserRelationship;
 use Illuminate\Database\Eloquent\Builder;
 
-
 /**
  * Class User.
  */
@@ -96,6 +95,20 @@ class User extends Authenticatable
         return $this->belongsToMany(Specialties::class, 'user_specialties', 'user_id');
     }
 
+    public function medicalRecord()
+    {
+        return $this->hasOne('App\Models\Auth\MedicalRecord');
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany('App\Models\Auth\Appointment', 'doctor_id');
+    }
+
+    public function myAppointments()
+    {
+        return $this->hasMany('App\Models\Auth\Appointment', 'patient_id');
+    }
 
 //    protected static function boot()
 //    {

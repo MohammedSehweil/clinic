@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers\Backend\Auth\Role;
 
+use App\Methods\ClinicMethods;
+use App\Methods\DoctorMethods;
 use App\Models\Auth\Clinic;
 use App\Models\Auth\Role;
+use App\Models\Auth\Appointment;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\AppointmentsResource;
 use App\Events\Backend\Auth\Role\RoleDeleted;
+use App\Models\Auth\Specialties;
 use App\Repositories\Backend\Auth\RoleRepository;
 use App\Http\Requests\Backend\Auth\Role\ClinicRequest;
 use App\Repositories\Backend\Auth\PermissionRepository;
 use App\Http\Requests\Backend\Auth\Role\StoreRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\ManageRoleRequest;
 use App\Http\Requests\Backend\Auth\Role\UpdateRoleRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 /**
  * Class ClinicController.
@@ -34,6 +42,16 @@ class ClinicController extends Controller
         $specialtiesFilter = $request->get('specialties', []);
         $countriesFilter = $request->get('countries', []);
         $cityFilter = $request->get('city', []);
+        $appointment = $request->get('appointment', []);
+        $serviceLocation = $request->get('service_location', []);
+
+        $from = $to = null;
+
+        if ($appointment) {
+            list($from, $to) = explode('-', $appointment);
+            $from = Carbon::parse($from);
+            $to = Carbon::parse($from);
+        }
 
 
         $user = \Auth::user();
@@ -72,9 +90,11 @@ class ClinicController extends Controller
                     return $query;
                 });
             })
+            ->when($serviceLocation, function ($q) use ($serviceLocation) {
+                return $q->where('service_location', $serviceLocation);
+            })
             ->orderBy('id', 'asc')
             ->paginate(25);
-
 
         if ($request->get('view', false)) {
             return view('clinic.partial.table', compact('clinics'));
@@ -106,7 +126,8 @@ class ClinicController extends Controller
                 'owner_id' => currentUser()->id,
                 'country_id' => $request->get('country_id'),
                 'city' => $request->get('city', null),
-                'description' => $request->get('description', null)
+                'description' => $request->get('description', null),
+                'service_location' => $request->get('service_location', null)
             ]);
 
         $specialties = $request->get('specialties', []);
@@ -159,6 +180,8 @@ class ClinicController extends Controller
                     'country_id' => $request->get('country_id'),
                     'city' => $request->get('city', null),
                     'description' => $request->get('description', null),
+                    'service_location' => $request->get('service_location', null),
+
                 ]
             );
 
@@ -220,5 +243,67 @@ class ClinicController extends Controller
         }
 
         return response()->json(['message' => 'The clinic was successfully rejected.'], 200);
+    }
+
+
+    public function getAppointments(ClinicRequest $request, $clinicId)
+    {
+        $appointments = Clinic::find($clinicId)->appointments;
+
+        return new AppointmentsResource($appointments);
+    }
+
+    public function confirmAppointment(ClinicRequest $request, $clinicId, $appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+
+        $appointments = Appointment::where('group_code', $appointment->group_code)
+            ->where('id', '!=', $appointment->id)
+            ->get()
+            ->map(function ($appointment) {
+                return $appointment->update([
+                    'reserved' => false,
+                    'patient_id' => null,
+                    'group_code' => ''
+                ]);
+            });
+
+        $appointment->update(['status' => true, 'group_code' => '']);
+
+        return new AppointmentResource($appointment);
+    }
+
+    public function rejectAppointment(ClinicRequest $request, $clinicId, $appointmentId)
+    {
+        $appointment = Appointment::find($appointmentId);
+
+        $appointment->update([
+            'patient_id' => null,
+            'reserved' => false,
+            'group_code' => ''
+        ]);
+
+        return new AppointmentsResource(Clinic::find($clinicId)->appointments);
+    }
+
+    public function getClinicsSpecialties(Request $request)
+    {
+        $clinicsIds = $request->get('clinicsIds', []);
+        $specialties = app(ClinicMethods::class)->getClinicsSpecialties($clinicsIds);
+        return ['results' => $specialties];
+    }
+
+    public function getSpecialtiesDoctors(Request $request)
+    {
+        $specialtiesId = $request->get('specialtiesId', []);
+        $doctors = app(DoctorMethods::class)->getSpecialtiesDoctors(Specialties::find($specialtiesId));
+        $doctorsArray = [];
+        foreach ($doctors as $doctorId => $doctorName) {
+            $doctorsArray[] = [
+                'text' => $doctorName,
+                'id' => $doctorId,
+            ];
+        }
+        return ['results' => $doctorsArray];
     }
 }
