@@ -96,12 +96,12 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-//    protected function mapFrontendAuthRoutes()
-//    {
-//        Route::middleware('web')
-//            ->namespace($this->namespace.'\Frontend\Auth')
-//            ->group(base_path('routes/frontend/auth.php'));
-//    }
+    protected function mapFrontendAuthRoutes()
+    {
+        Route::middleware('web')
+            ->namespace($this->namespace.'\Frontend\Auth')
+            ->group(base_path('routes/frontend/auth.php'));
+    }
 
     /**
      * Define the "Backend Auth" routes for the application.
@@ -109,11 +109,11 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-//    protected function mapBackendAuthRoutes()
-//    {
-//        Route::middleware('web')
-//           // ->prefix('admin')
-//            ->namespace($this->namespace.'\Backend\Auth')
-//            ->group(base_path('routes/backend/auth.php'));
-//    }
+    protected function mapBackendAuthRoutes()
+    {
+        Route::middleware('web')
+           // ->prefix('admin')
+            ->namespace($this->namespace.'\Backend\Auth')
+            ->group(base_path('routes/Backend/auth.php'));
+    }
 }
